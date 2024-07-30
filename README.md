@@ -1,8 +1,3 @@
-
-![Logo](https://www.canva.com/design/DAGLuLRQIzc/lmNG9FI70RQpkh7gvP_J9w/view)
-
-
-
 # Meloob
 
 A website for saving and sharing playlists with friends! This application allows users to create and save playlists. Users have the ability to add friends and see playlists their friends have created and saved.
