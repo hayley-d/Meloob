@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+#splash, .splash{
+    background-image: url("../images/splash.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height:100vh;
+    margin-bottom: 25vh;
+}
+
+*{
+    font-family: "Montserrat", sans-serif;
+}
+
+
+.about-text{
+    font-family: "Montserrat", sans-serif;
+    color:white;
+    font-size:20px;
+}
+
+.back-btn{
+    background-color: #ff9770;
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px #ff9770 solid;
+    padding:10px;
+    text-decoration: none; !important;
+    margin:20px;
+    margin-top:50px;
+}
+
+.back-btn:hover{
+    color: white;
+    text-decoration: none; !important;
+}
+
+form{
+    font-family: "Montserrat", sans-serif;
+    color:#28282f;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    justify-content: center;
+    min-height:50vh;
+    padding:20px;
+    border-radius: 10px;
+    height:fit-content;
+
+}
+
+.is-invalid .form-control {
+    border-color: #dc3545!important;
+    padding-right: calc(1.5em + 0.75rem)!important;
+}
+
+.invalid-feedback {
+    display: block!important;
+}
+
+form > button {
+    font-family: "Montserrat", sans-serif;!important;
+    color: #fff!important;
+    background-color: #ff70a6!important;
+    border:none!important;
+}
+
+.form-floating{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.form-heading{
+    font-family: "Concert One", sans-serif;
+    font-size: 70px;
+    color: #70d6ff;
+}
+
+.about-heading{
+    font-family: "Concert One", sans-serif;
+    font-size: 70px;
+    color: #ff9770;
+}
+
+
+
+

@@ -1,0 +1,13 @@
+#Build Image
+docker build -t u21528790 .
+
+#Run Image
+docker run --name app -p 3001:3001 u21528790
+
+#Stop run
+docker stop app
+
+#Remove
+docker rm app
+
+
