@@ -31,10 +31,17 @@ export class SongContainerVetical extends Component {
     constructor(props) {
         super(props);
         this.songs = this.props.songs;
+        this.playlist = this.props.playlist;
+        this.remove = this.props.remove;
+        this.onRemove = this.props.onRemove;
+    }
+
+    async componentDidMount() {
+        
     }
 
     render() {
-        if (!Array.isArray(this.songs)) {
+        if (!Array.isArray(this.props.songs)) {
             return <div>Error: Songs data is not an array.</div>;
         }
 
@@ -42,10 +49,10 @@ export class SongContainerVetical extends Component {
             <div className="container-fluid"
                  style={{display: "flex",flexDirection:"column", gap: "30px", justifyContent: "center", alignItems: "center"}}>
                 <Scrollbar style={{width: "40vw", height: "80vh", gap: "50px"}}>
-                    {this.songs.map((song, index) => (
+                    {this.props.songs.map((song, index) => (
                         <div key={index} style={{marginTop:"30px",marginBottom:"30px"}}>
                             <Song
-                                song={song}
+                                song={song} remove={this.remove} playlist={this.playlist} onRemove={this.onRemove}
                             />
                         </div>
                     ))}

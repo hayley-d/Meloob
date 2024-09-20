@@ -1225,4 +1225,84 @@ userRoutes.post('/add/song', async (req, res) => {
     }
 });
 
+/**
+ * Removes a song from a playlist's songs array.
+ *
+ * @route DELETE /api/playlist/:playlistId/song/:songId
+ * @param {string} req.params.playlistId - The ID of the playlist.
+ * @param {string} req.params.songId - The ID of the song to be removed.
+ * @returns {Object} - The updated playlist object.
+ * @throws {Error} - Returns a 404 status code if the playlist or song is not found.
+ *
+ * @example
+ * // Successful response example:
+ * {
+ *   "playlist": {
+ *     "_id": "64e3f1bc9f12a61d2c5a4c58",
+ *     "name": "My Playlist",
+ *     "songs": ["song1", "song3"] // song2 has been removed
+ *   }
+ * }
+ *
+ * @example
+ * // Error response example:
+ * {
+ *   "message": "Playlist or song not found"
+ * }
+ */
+userRoutes.delete('/playlist/:playlistId/song/:songId', async (req, res) => {
+    try {
+        const { playlistId, songId } = req.params;
+
+        const playlist = await Playlist.findByIdAndUpdate(
+            playlistId, 
+            { $pull: { songs: songId } }, 
+            { new: true } 
+        ).exec();
+
+        if (!playlist) {
+            return res.status(404).json({ message: 'Playlist not found' });
+        }
+        const genres = await Genre.find().exec();
+        if (playlist && genres) {
+            const genre_name = genres.find(g => g._id.toString() === playlist.genre.toString());
+            let formattedPlaylist = {
+                id: playlist._id.toString(),
+                userId: playlist.userId,
+                coverImage: playlist.coverImage,
+                date_created: playlist.date_created,
+                genre: genre_name.name,
+                name: playlist.name,
+                description: playlist.description,
+                hashtags: playlist.hashtags,
+                songs: playlist.songs
+            };
+
+            const user = await User.findById(playlist.userId).exec();
+            if (user) {
+                formattedPlaylist.user = user;
+            } else {
+                formattedPlaylist.user = null;
+            }
+
+            const comments = await Comment.find({ playlistId }).exec();
+
+            const commentsWithUser = await Promise.all(comments.map(async (comment) => {
+                const commentUser = await User.findById(comment.userId).exec();
+                return {
+                    ...comment.toObject(),
+                    user: commentUser ? commentUser : null
+                };
+            }));
+
+            formattedPlaylist.comments = commentsWithUser;
+            return res.status(200).json(formattedPlaylist);
+        }
+    } catch (error) {
+        console.error('Error removing song from playlist:', error);
+        res.status(500).json({ message: 'Failed to remove song from playlist' });
+    }
+});
+
+
 module.exports = userRoutes;

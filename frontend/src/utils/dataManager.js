@@ -460,6 +460,26 @@ class DataManager {
         }
     }
 
+   async removeSongFromPlaylist(playlistId, songId) {
+        try {
+          const response = await fetch(`/api/playlist/${playlistId}/song/${songId}`, {
+            method: 'DELETE',
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+          }
+
+          const data = await response.json();
+          console.log('Updated Playlist:', data);
+          return data;
+        } catch (error) {
+          console.error('Error removing song:', error);
+        }
+  }
+
+
 }
 
 const dataManager = new DataManager();

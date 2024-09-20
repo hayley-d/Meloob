@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import dataManager from "../utils/dataManager";
-import {useNavigate, useParams} from "react-router-dom";
-import {ProfileView} from "../components/ProfileView";
-import {PlaylistContainerHorizontal} from "../components/PlaylistContainerHorizontal";
+import {useParams} from "react-router-dom";
 import {NavBar} from "../components/NavBar";
-import {CommentContainer} from "../components/CommentContainer";
 import {PlaylistPreviewFull} from "../components/PlaylistPreviewFull";
 import {SongContainerVetical} from "../components/SongContainerVetical";
 
@@ -14,15 +11,21 @@ export function Playlist() {
     const [playlist,setPlaylist] = useState({});
     const [sessionUser,setSessionUser] = useState({});
     const [songs,setSongs] = useState([]);
+    const [remove,setRemove] = useState(false);
 
     useEffect(() => {
         setSessionUser(sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')) : '');
+        console.log();
         const fetchPlaylist = async () => {
             setIsLoading(true);
 
             try {
                 const playlist = await dataManager.getPlaylistByID(id);
                 setPlaylist(playlist);
+                console.log(JSON.parse(sessionStorage.getItem('userData')).email,playlist.user.email);
+                const rem = JSON.parse(sessionStorage.getItem('userData')).email === playlist.user.email ? true:false;
+                console.log(rem);
+                setRemove(rem);
 
                 if (playlist && Array.isArray(playlist.songs)) {
                     const fetchedSongs = await fetchSongs(playlist.songs);
@@ -54,6 +57,28 @@ export function Playlist() {
         }
     }
 
+    /**
+     * Removes a song from the playlist by calling the API.
+     * This function is a placeholder for further implementation.
+     *
+     * @function removeSong
+     */
+    async function removeSong(songId) {
+        console.log(songId,"Being removed");
+        try {
+            const updatedPlaylist = await dataManager.removeSongFromPlaylist(id, songId);
+            setPlaylist(updatedPlaylist);
+            if (updatedPlaylist && Array.isArray(updatedPlaylist.songs)) {
+                    const fetchedSongs = await fetchSongs(updatedPlaylist.songs);
+                    setSongs(fetchedSongs);
+                } else {
+                    setSongs([]);
+                }
+        } catch (error) {
+            console.error('Error removing song:', error);
+        }
+    }
+
     if (isLoading) {
         return (
             <div>
@@ -80,7 +105,7 @@ export function Playlist() {
 
             }}>
                 <PlaylistPreviewFull playlist={playlist}/>
-                <SongContainerVetical songs={songs}/>
+                <SongContainerVetical songs={songs} remove={remove} playlist={id} onRemove={removeSong}/>
             </div>
         </div>
 
