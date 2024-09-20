@@ -1,0 +1,14 @@
+node_modules/
+# Build output directories
+dist/
+build/
+
+# Environment variables
+.env
+
+# Log files
+*.log
+
+backend/models
+backend/db.js
+
