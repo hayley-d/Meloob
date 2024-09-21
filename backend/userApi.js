@@ -1448,5 +1448,57 @@ userRoutes.post('/playlists/by-users', async (req, res) => {
     }
 });
 
+/**
+ * Deletes a playlist by its ID.
+ *
+ * This route deletes the playlist and removes it from the user's created playlists.
+ * Additionally, it removes the playlist from any user's saved playlists.
+ *
+ * @route DELETE /api/playlists/:playlistId
+ * @param {string} req.params.playlistId - The ID of the playlist to delete.
+ * @returns {Object} - Success message if the playlist was deleted successfully.
+ * @throws {Error} - Returns an error message if the deletion fails.
+ *
+ * @example
+ * // Request URL example:
+ * DELETE /api/playlists/60f9d0f123abdef1250aa29
+ *
+ * // Successful response:
+ * {
+ *   "message": "Playlist deleted successfully"
+ * }
+ *
+ * @example
+ * // Error response example:
+ * {
+ *   "message": "Error deleting playlist"
+ * }
+ */
+userRoutes.delete('/playlists/:playlistId', async (req, res) => {
+    const { playlistId } = req.params;
+
+    try {
+        const playlist = await Playlist.findById(playlistId);
+
+        if (!playlist) {
+            return res.status(404).json({ message: 'Playlist not found' });
+        }
+
+        const { userId } = playlist;
+        await Playlist.findByIdAndDelete(playlistId);
+        await User.findByIdAndUpdate(userId, {
+            $pull: { playlists_created: playlistId }
+        });
+        await User.updateMany(
+            { playlists_saved: playlistId },
+            { $pull: { playlists_saved: playlistId } }
+        );
+
+        res.status(200).json({ message: 'Playlist deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting playlist:', error);
+        res.status(500).json({ message: 'Error deleting playlist', error: error.message });
+    }
+});
 
 module.exports = userRoutes;

@@ -15,16 +15,16 @@ export function Playlist() {
 
     useEffect(() => {
         setSessionUser(sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')) : '');
-        console.log();
+       // console.log();
         const fetchPlaylist = async () => {
             setIsLoading(true);
 
             try {
                 const playlist = await dataManager.getPlaylistByID(id);
                 setPlaylist(playlist);
-                console.log(JSON.parse(sessionStorage.getItem('userData')).email,playlist.user.email);
+               // console.log(JSON.parse(sessionStorage.getItem('userData')).email,playlist.user.email);
                 const rem = JSON.parse(sessionStorage.getItem('userData')).email === playlist.user.email ? true:false;
-                console.log(rem);
+                //console.log(rem);
                 setRemove(rem);
 
                 if (playlist && Array.isArray(playlist.songs)) {

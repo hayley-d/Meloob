@@ -13,6 +13,7 @@ export function Profile() {
     const [savedPlaylists, setSavedPlaylists] = useState([]);
     const [isFollowing, setIsFollowing] = useState(false);
     const [sessionUser, setSessionUser] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -20,7 +21,9 @@ export function Profile() {
                 const fetchedUser = await dataManager.getUser(id);
                 await setUser(fetchedUser);
                 const following = JSON.parse(sessionStorage.getItem('userData')).following.find(user => user === id);
-                if(following){
+                const owner = JSON.parse(sessionStorage.getItem('userData'))._id == id;
+                await setIsOwner(true);
+                if(following || owner){
                     await setIsFollowing(true);
                 }
                 if (fetchedUser) {
@@ -79,7 +82,7 @@ export function Profile() {
         <ProfileView onFollow={changeFollowing}/>
 
         {
-            isFollowing ? (
+            isFollowing || isOwner ? (
                     <div>
                         {createdPlaylists.length > 0 && <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
                             <h3 className="home-heading" style={{color: "#ff70a6"}}>Created</h3>

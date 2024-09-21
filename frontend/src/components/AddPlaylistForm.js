@@ -13,14 +13,14 @@ export function AddPlaylistForm() {
         return `${day}/${month}/${year}`;
     };
 
-    const [formData, setFormData] = useState({ userId: JSON.parse(sessionStorage.getItem('userData'))._id,coverImage: '',date_created:getCurrentDate(), genre: '',name: 'new Playlist', description: '', hashtags: [], songs:[] });
+    const [formData, setFormData] = useState({ userId: JSON.parse(sessionStorage.getItem('userData'))._id,coverImage: '',date_created:getCurrentDate(), genre: '66e377a9b13b146f637c19e8',name: 'new Playlist', description: '', hashtags: [], songs:[] });
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
     const [coverImageUrl, setCoverImageUrl] = useState('https://octodex.github.com/images/vinyltocat.png');
     const [selectedGenreOption, setSelectedGenreOption] = useState('1');
 
     useEffect(() => {
-        console.log("Form data updated:", formData);
+       // console.log("Form data updated:", formData);
     }, [formData]);
 
     /**
@@ -39,7 +39,6 @@ export function AddPlaylistForm() {
      * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
      */
     const handleHashtagsChange = (e) => {
-        // Split the input value by spaces and filter out any empty strings
         const hashtags = e.target.value.split(' ').filter(tag => tag.trim() !== '');
         setFormData({
             ...formData,
@@ -59,10 +58,10 @@ export function AddPlaylistForm() {
             return;
         }
 
+       // console.log("Submitting",formData);
+
         try {
             const response = await dataManager.addPlaylist(formData.userId,formData);
-            console.log('Playlist created successfully:', response.playlist);
-            console.log('User updated successfully:', response.user);
             navigate(`/home`);
         } catch (error) {
             console.error("Error adding playlist:", error);
@@ -76,8 +75,37 @@ export function AddPlaylistForm() {
     const handelImageChange = async (e) => {
         const url = e.target.value;
 
+        if (!isValidUrl(url)) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                coverImage: 'Invalid URL format',
+            }));
+            setCoverImageUrl('https://octodex.github.com/images/vinyltocat.png');
+            return;
+        } else {
+            setErrors((prevErrors) => ({ ...prevErrors, coverImage: null }));
+        }
+
         try {
-            const response = await fetch(url, { method: 'GET' }).catch((error) => {
+            const response = await fetch(url, { mode: 'no-cors' });
+            if (response.ok || response.type === 'opaque') {
+                setFormData({ ...formData, coverImage: url });
+                setCoverImageUrl(url);
+            } else {
+                throw new Error('Image not found');
+            }
+        } catch (error) {
+            console.error('Error loading image:', error);
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                coverImage: 'Image not found at the provided URL',
+            }));
+            setFormData({ ...formData, coverImage: '' });
+            setCoverImageUrl('https://octodex.github.com/images/vinyltocat.png');
+        }
+
+        /*try {
+            const response = await fetch(url, {mode: 'no-cors'}).catch((error) => {
                 setFormData({ ...formData, coverImage: '' });
                 setCoverImageUrl('https://octodex.github.com/images/vinyltocat.png');
             });
@@ -91,7 +119,7 @@ export function AddPlaylistForm() {
             console.error('Error loading image:', error);
             setFormData({ ...formData, coverImage: '' });
             setCoverImageUrl('https://octodex.github.com/images/vinyltocat.png');
-        }
+        }*/
     };
 
     /**
@@ -142,6 +170,20 @@ export function AddPlaylistForm() {
         }
         else {
             return "66e377a9b13b146f637c19ea";//Classic
+        }
+    };
+
+    /**
+     * Validate if the input URL is a valid URL.
+     * @param {string} url - The URL to validate.
+     * @returns {boolean} - True if the URL is valid, false otherwise.
+     */
+    const isValidUrl = (url) => {
+        try {
+            new URL(url);
+            return true;
+        } catch (_) {
+            return false;
         }
     };
 

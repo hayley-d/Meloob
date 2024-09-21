@@ -534,6 +534,43 @@ class DataManager {
         }
     }
 
+    /**
+     * Deletes a playlist by its ID.
+     *
+     * This function sends a DELETE request to remove the playlist from the database
+     * and updates the users' created and saved playlists.
+     *
+     * @param {string} playlistId - The ID of the playlist to delete.
+     * @returns {Promise<Object>} - A success or error message from the API response.
+     * @throws {Error} - Throws an error if the API request fails.
+     *
+     * @example
+     * dataManager.deletePlaylist('60f9d0f123abdef1250aa29')
+     *   .then(response => console.log(response))
+     *   .catch(error => console.error(error));
+     */
+    async deletePlaylist(playlistId) {
+        try {
+            const response = await fetch(`/api/playlists/${playlistId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('Error deleting playlist:', error);
+            throw error;
+        }
+    }
+
+
 
 }
 

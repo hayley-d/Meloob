@@ -38,7 +38,7 @@ export function EditPlaylistForm() {
     }, [id]);
 
     useEffect(() => {
-        console.log("Form data updated:", formData);
+        //console.log("Form data updated:", formData);
     }, [formData]);
 
     /**
@@ -136,7 +136,7 @@ export function EditPlaylistForm() {
         const url = e.target.value;
 
         try {
-            const response = await fetch(url, { method: 'HEAD' });
+            const response = await fetch(url,  {mode: 'no-cors'});
             if (response.ok) {
                 setFormData({ ...formData, coverImage: url });
                 setCoverImageUrl(url);
@@ -164,11 +164,17 @@ export function EditPlaylistForm() {
         }
     };
 
+    async function deletePlaylist (e) {
+        e.preventDefault();
+        await dataManager.deletePlaylist(id);
+        navigate(`/home`);
+    }
+
 
     return (
         <div className="container">
             <h2>Edit Playlist</h2>
-            <form onSubmit={handleFormSubmit}>
+            <form>
                 <div className="form-profile-image" style={{
                     backgroundImage: `url(${coverImageUrl})`,
                     borderRadius: "20px",
@@ -219,7 +225,12 @@ export function EditPlaylistForm() {
                     {errors.coverImage && <p style={{color: 'red'}}>{errors.coverImage}</p>}
                 </div>
 
-                <button type="submit" className="btn">Save Changes</button>
+                <div style={{display: "flex", justifyContent: "center", gap: "50px"}}>
+                    <button onClick={handleFormSubmit} className="btn">Save Changes</button>
+                    <button onClick={deletePlaylist} className="btn btn-danger">Delete</button>
+                </div>
+
+
             </form>
         </div>
     );
