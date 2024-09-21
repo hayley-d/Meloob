@@ -476,6 +476,24 @@ class DataManager {
         }
   }
 
+    async removeFollower(userId, followerId) {
+        try {
+            const response = await fetch(`/api/user/${userId}/follower/${followerId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error removing followr:', error);
+        }
+    }
+
 
 }
 

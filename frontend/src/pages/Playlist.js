@@ -59,12 +59,10 @@ export function Playlist() {
 
     /**
      * Removes a song from the playlist by calling the API.
-     * This function is a placeholder for further implementation.
      *
      * @function removeSong
      */
     async function removeSong(songId) {
-        console.log(songId,"Being removed");
         try {
             const updatedPlaylist = await dataManager.removeSongFromPlaylist(id, songId);
             setPlaylist(updatedPlaylist);

@@ -48,6 +48,7 @@ export function ProfileView() {
     const [modalShow, setModalShow] = React.useState(false);
     const [friends, setFriends] = React.useState([]);
     const [friend, setFriend] = React.useState(false);
+    const [length, setLength] = React.useState(0);
 
     useEffect(() => {
         const email = sessionStorage.getItem('user');
@@ -58,12 +59,18 @@ export function ProfileView() {
             try {
                 const user = await dataManager.getUser(id);
                 setUser(user);
+                setLength(user.followers.length);
                 const friends = await getFollowing(user.following);
                 setFriends(friends);
                 const isFriend = friends.find(user => user._id === sessionUser._id);
                 if (isFriend) {
                     setFriend(true);
+                }
+                const isFollowing_flag = JSON.parse(sessionStorage.getItem('userData')).following.find(user => user === id);
+                if(isFollowing_flag) {
                     setIsFollowing(true);
+                }else{
+                    setIsFollowing(false);
                 }
 
 
@@ -110,8 +117,28 @@ export function ProfileView() {
     }
 
     const handelUnfollow = async ()=>{
-        //setFriend(false);
         setIsFollowing(false);
+        await removeFollower(id);
+        const updatedUser = await dataManager.getUser(id);
+        setUser(updatedUser);
+        setLength(updatedUser.followers.length);
+        setIsFollowing(false); 
+    }
+
+    /**
+     * Removes a following from the user by calling the API.
+     *
+     * @function removeFollower
+     */
+    async function removeFollower(followerId) {
+        try {
+            const updateduser = await dataManager.removeFollower(sessionUser._id, followerId);
+            setSessionUser(updateduser);
+            console.log(updateduser);
+            sessionStorage.setItem('userData', JSON.stringify(updateduser));
+        } catch (error) {
+            console.error('Error removing song:', error);
+        }
     }
 
 
@@ -162,7 +189,7 @@ export function ProfileView() {
                             <div>{user.playlists_created.length}</div>
                             <div className="follower-btn"
                                  style={{cursor: "pointer"}}
-                                 onClick={() => setModalShow(true)}>{user.followers.length}</div>
+                                 onClick={() => setModalShow(true)}>{length}</div>
                             <div>Playlists</div>
                             <div className="follower-btn" style={{cursor: "pointer"}}
                                  onClick={() => setModalShow(true)}>Followers

@@ -1304,5 +1304,65 @@ userRoutes.delete('/playlist/:playlistId/song/:songId', async (req, res) => {
     }
 });
 
+/**
+ * Removes a follower from a user's following array.
+ *
+ * @route DELETE /api/user/:userId/follower/:followerId
+ * @param {string} req.params.userId - The ID of the user.
+ * @param {string} req.params.followerId - The ID of the follower to be removed.
+ * @returns {Object} - The updated user object.
+ * @throws {Error} - Returns a 404 status code if the user or follower is not found.
+ *
+ * @example
+ * // Successful response example:
+ * {
+ *   "user": {
+ *     "_id": "64e3f1bc9f12a61d2c5a4c58",
+ *     "username": "My Playlist",
+ *     "email": "Some@email.com",
+ *     "profile_picture":"https://someImage.png",
+ *     "followers" : [id1,id2],
+ *     "following":[id3,id4],
+ *     "playlists_created":[id1,id2],
+ *     "playlists_saved":[id1,id2],
+ *     "description": "some description"
+ *   }
+ * }
+ *
+ * @example
+ * // Error response example:
+ * {
+ *   "message": "user or follower not found"
+ * }
+ */
+userRoutes.delete('/user/:userId/follower/:followerId', async (req, res) => {
+    try {
+        const { userId, followerId } = req.params;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $pull: { following: followerId } },
+            { new: true }
+        ).exec();
+
+        const follower = await User.findByIdAndUpdate(
+            followerId,
+            { $pull: { followers: userId } },
+            { new: true }
+        ).exec();
+
+        if (!user || !follower) {
+            return res.status(404).json({ message: 'User or follower not found' });
+        }
+
+        if (user && follower) {
+            return res.status(200).json(user);
+        }
+    } catch (error) {
+        console.error(`Error removing follower from user's following list:`, error);
+        res.status(500).json({ message: 'Failed to remove follower from user follower list' });
+    }
+});
+
 
 module.exports = userRoutes;
