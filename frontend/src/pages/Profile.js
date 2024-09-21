@@ -11,13 +11,18 @@ export function Profile() {
     const [isLoading, setIsLoading] = useState(true);
     const [createdPlaylists, setCreatedPlaylists] = useState([]);
     const [savedPlaylists, setSavedPlaylists] = useState([]);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [sessionUser, setSessionUser] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const fetchedUser = await dataManager.getUser(id);
-                setUser(fetchedUser);
-
+                await setUser(fetchedUser);
+                const following = JSON.parse(sessionStorage.getItem('userData')).following.find(user => user === id);
+                if(following){
+                    await setIsFollowing(true);
+                }
                 if (fetchedUser) {
                     const {playlists_created, playlists_saved} = await fetchUserPlaylists(fetchedUser);
                     setCreatedPlaylists(playlists_created);
@@ -48,6 +53,11 @@ export function Profile() {
         }
     }
 
+    async function changeFollowing(isFollowing) {
+        console.log("changing following",isFollowing)
+        await setIsFollowing(isFollowing);
+    }
+
     if (isLoading) {
         return (
             <div>
@@ -67,19 +77,27 @@ export function Profile() {
 
     return <div>
         <NavBar location="Profile"/>
-        <ProfileView/>
-        {createdPlaylists.length > 0 && <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
-            <h3 className="home-heading" style={{color: "#ff70a6"}}>Created</h3>
-            <hr/>
-        </div>}
-        {createdPlaylists.length > 0 && (
-            <PlaylistContainerHorizontal playlists={createdPlaylists}/>
-        )}
-        {savedPlaylists.length > 0 && <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
-            <h3 className="home-heading" style={{color: "#70d6ff"}}>Saved</h3>
-            <hr/>
-        </div>}
-        {savedPlaylists.length > 0 && <PlaylistContainerHorizontal playlists={savedPlaylists}/>}
+        <ProfileView onFollow={changeFollowing}/>
+
+        {
+            isFollowing ? (
+                    <div>
+                        {createdPlaylists.length > 0 && <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
+                            <h3 className="home-heading" style={{color: "#ff70a6"}}>Created</h3>
+                            <hr/>
+                        </div>}
+                        {createdPlaylists.length > 0 && (
+                            <PlaylistContainerHorizontal playlists={createdPlaylists}/>
+                        )}
+                        {savedPlaylists.length > 0 && <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
+                            <h3 className="home-heading" style={{color: "#70d6ff"}}>Saved</h3>
+                            <hr/>
+                        </div>}
+                        {savedPlaylists.length > 0 && <PlaylistContainerHorizontal playlists={savedPlaylists}/>}
+                    </div>
+            ) : null
+        }
+
     </div>
 
 

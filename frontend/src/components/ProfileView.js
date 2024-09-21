@@ -37,7 +37,7 @@ function MyVerticallyCenteredModal(props) {
     );
 }
 
-export function ProfileView() {
+export function ProfileView({onFollow}) {
     const {id} = useParams();
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -96,6 +96,7 @@ export function ProfileView() {
             const newInfo = await dataManager.updateUserFollowing(currentUser._id, user.id);
             setUser(newInfo);
             setIsFollowing(true);
+            await onFollow(true);
 
         } catch (error) {
             console.error("Error following user:", error);
@@ -122,7 +123,8 @@ export function ProfileView() {
         const updatedUser = await dataManager.getUser(id);
         setUser(updatedUser);
         setLength(updatedUser.followers.length);
-        setIsFollowing(false); 
+        setIsFollowing(false);
+        await onFollow(false);
     }
 
     /**
