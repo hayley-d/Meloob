@@ -44,7 +44,10 @@ import dataManager from "../utils/dataManager";
       return(
           <nav className="navigation navbar container-fluid ">
               <div className="container-fluid navdiv">
-                  <div id="logo"></div>
+                  <NavLink className="navlink" to='/home'>
+                      <div id="logo"></div>
+                  </NavLink>
+
                   {location === 'splash' ? (
                       <NavLink className="navlink" to='/login'>Login</NavLink>
                   ) : (
