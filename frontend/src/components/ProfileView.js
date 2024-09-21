@@ -47,6 +47,7 @@ export function ProfileView() {
     const navigate = useNavigate();
     const [modalShow, setModalShow] = React.useState(false);
     const [friends, setFriends] = React.useState([]);
+    const [friend, setFriend] = React.useState(false);
 
     useEffect(() => {
         const email = sessionStorage.getItem('user');
@@ -59,6 +60,13 @@ export function ProfileView() {
                 setUser(user);
                 const friends = await getFollowing(user.following);
                 setFriends(friends);
+                const isFriend = friends.find(user => user._id === sessionUser._id);
+                if (isFriend) {
+                    setFriend(true);
+                    setIsFollowing(true);
+                }
+
+
             } catch (error) {
                 console.error("Error fetching user:", error);
             } finally {
@@ -71,7 +79,7 @@ export function ProfileView() {
 
     useEffect(() => {
         if (user && sessionEmail) {
-            
+
         }
     }, [user, sessionEmail]);
 
@@ -99,6 +107,11 @@ export function ProfileView() {
         } catch (error) {
             console.error("Error retrieving user's following list:", error);
         }
+    }
+
+    const handelUnfollow = async ()=>{
+        //setFriend(false);
+        setIsFollowing(false);
     }
 
 
@@ -179,10 +192,17 @@ export function ProfileView() {
                                 <button className="btn" style={{backgroundColor: "#70d6ff", color: "white"}}
                                         onClick={handleFollow}>Follow</button>
                             ) : (
-                                <button className="btn"
+                                <button className="btn" onClick={handelUnfollow}
                                         style={{backgroundColor: "grey", color: "white"}}>Following</button>
                             )
                         )}
+                    </div>
+                    <div>
+                        {
+                            isOwner ? null : (
+                                friend ? (<p>This user follows you</p>) : null
+                            )
+                        }
                     </div>
                 </div>
                 <div className="profile-desc" style={{fontSize: "20px"}}>
