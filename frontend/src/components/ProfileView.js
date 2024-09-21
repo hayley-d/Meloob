@@ -113,7 +113,6 @@ export function ProfileView({onFollow}) {
     };
 
     const getFollowers = async (user) => {
-        console.log(user.followers);
         try {
             const followers = await dataManager.getFollowing(user.followers);
             return followers;
@@ -151,7 +150,6 @@ export function ProfileView({onFollow}) {
         try {
             const updateduser = await dataManager.removeFollower(sessionUser._id, followerId);
             setSessionUser(updateduser);
-            console.log(updateduser);
             sessionStorage.setItem('userData', JSON.stringify(updateduser));
         } catch (error) {
             console.error('Error removing song:', error);
