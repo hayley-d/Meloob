@@ -54,7 +54,6 @@ export function Profile() {
     }
 
     async function changeFollowing(isFollowing) {
-        console.log("changing following",isFollowing)
         await setIsFollowing(isFollowing);
     }
 

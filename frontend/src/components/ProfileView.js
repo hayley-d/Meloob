@@ -14,7 +14,7 @@ function MyVerticallyCenteredModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Following
+                    Followers
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body style={{fontSize: "16px"}}>
@@ -48,6 +48,7 @@ export function ProfileView({onFollow}) {
     const [modalShow, setModalShow] = React.useState(false);
     const [friends, setFriends] = React.useState([]);
     const [friend, setFriend] = React.useState(false);
+    const [followers, setFollowers] = React.useState(false);
     const [length, setLength] = React.useState(0);
 
     useEffect(() => {
@@ -62,6 +63,8 @@ export function ProfileView({onFollow}) {
                 setLength(user.followers.length);
                 const friends = await getFollowing(user.following);
                 setFriends(friends);
+                const followers = await getFollowers(user);
+                setFollowers(followers);
                 const isFriend = friends.find(user => user._id === sessionUser._id);
                 if (isFriend) {
                     setFriend(true);
@@ -96,6 +99,8 @@ export function ProfileView({onFollow}) {
             const newInfo = await dataManager.updateUserFollowing(currentUser._id, user.id);
             setUser(newInfo);
             setIsFollowing(true);
+            setLength(newInfo.followers.length);
+            await onFollow(true);
             await onFollow(true);
 
         } catch (error) {
@@ -106,6 +111,16 @@ export function ProfileView({onFollow}) {
     const handleEditProfile = () => {
         navigate(`/edit-profile/${id}`);
     };
+
+    const getFollowers = async (user) => {
+        console.log(user.followers);
+        try {
+            const followers = await dataManager.getFollowing(user.followers);
+            return followers;
+        } catch (error) {
+            console.error("Error retrieving user's follower list:", error);
+        }
+    }
 
     const getFollowing = async () => {
         try {
@@ -180,7 +195,7 @@ export function ProfileView({onFollow}) {
                     <div className="profile-user-img"
                          style={{gridRow: "span 3", backgroundImage: `url(${user.profile_picture})`}}></div>
                     <div><h2 style={{fontSize: "30px", fontWeight: "bold"}}>{user.username}</h2></div>
-                    {isOwner ? (
+                    {isFollowing ? (
                         <div style={{
                             display: "grid",
                             gridTemplateColumns: "1fr 1fr",
@@ -241,7 +256,7 @@ export function ProfileView({onFollow}) {
             <MyVerticallyCenteredModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                friends={friends}
+                friends={followers}
             />
         </div>
     )
