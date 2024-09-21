@@ -7,7 +7,6 @@ class DataManager {
         return await fetch('http://localhost:3001/api/playlists')
             .then(response => response.json())
             .then(async data => {
-                // Wait for all user fetch promises to resolve before returning data
                 const updatedPlaylists = await Promise.all(
                     data.map(async playlist => {
                         playlist.user = await dataManager.getUser(playlist.userId);
@@ -15,9 +14,6 @@ class DataManager {
                     })
                 );
                 return updatedPlaylists;
-            })
-            .finally(() => {
-                console.log('All playlists and user data have been fetched.');
             })
             .catch(error => {
                 console.error('Error fetching playlists:', error);
@@ -51,11 +47,7 @@ class DataManager {
     async getPlaylistByID(playlistId){
        return await fetch(`http://localhost:3001/api/playlists/${playlistId}`).then(response => response.json())
             .then(async data => {
-                console.log(data);
                 return data;
-            })
-            .finally(() => {
-                console.log('The playlist has been fetched.');
             })
             .catch(error => {
                 console.error('Error fetching playlist:', error);
@@ -67,25 +59,39 @@ class DataManager {
         return await fetch(`/api/users/${id}`)
             .then(response => response.json())
             .then(data => {
-                //console.log(data)
                 return data;
             })
             .catch(error => {
-                console.error('Error fetching songs:', error);
+                console.error('Error fetching user:', error);
             });
     }
 
+    async getFollowing(following_array) {
+        let following = [];
+        try {
+            following = await Promise.all(
+                following_array.map(async (id) => {
+                    return await fetch(`/api/users/${id}`)
+                        .then(response => response.json())
+                        .catch(error => {
+                            console.error(`Failed to fetch data for user ${id}:`, error);
+                            return {};
+                        });
+                })
+            );
+        } catch (error) {
+            console.error('Error fetching following data:', error);
+        }
+        return following;
+    }
+
+
     //retrieves a user by email
     async getUserByEmail(email) {
-        console.log(email);
-
         return await fetch(`http://localhost:3001/api/user/email/${encodeURIComponent(email)}`)
             .then(response => response.json())
             .then(data => {
-                //console.log(data)
                 return data;
-            }).finally(() => {
-                console.log('User fetched');
             })
             .catch(error => {
                 console.error('Error fetching songs:', error);
@@ -94,7 +100,6 @@ class DataManager {
 
     //used to update the following/followers of two users
     async updateUserFollowing(userId, followedUserId) {
-        console.log("Updating...", userId);
         try {
             const response = await fetch(`http://localhost:3001/api/users/${userId}/follow`, {
                 method: 'PATCH',
@@ -107,8 +112,6 @@ class DataManager {
             if (response.ok) {
                 const data = await response.json();
                 const user = data.user2;
-
-                console.log('Updated following:', data.user1);
                 sessionStorage.setItem('userData', JSON.stringify(data.user1));
                 return user;
             } else {
@@ -118,13 +121,12 @@ class DataManager {
             }
         } catch (error) {
             console.error('Error in updateUserFollowing:', error);
-            throw error;  // Throw the error to be handled by the caller
+            throw error;
         }
     }
 
     //given an array of playlist ids retrieves all playlists with those ids
     async getPlaylistsByIds(playlistIds) {
-        console.log("Making the call..");
         try {
             const response = await fetch('http://localhost:3001/api/playlists', {
                 method: 'POST',
@@ -141,7 +143,7 @@ class DataManager {
             return await response.json();
         } catch (error) {
             console.error("Error fetching playlists:", error);
-            throw error;  // Re-throw the error to handle it elsewhere if needed
+            throw error;
         }
     }
 
@@ -197,7 +199,7 @@ class DataManager {
             }
 
             const updatedUser = await response.json();
-            console.log("User updated:", updatedUser);
+            return updatedUser;
         } catch (error) {
             console.error("Error updating profile:", error);
             throw error;
@@ -235,7 +237,6 @@ class DataManager {
      * }
      */
     async updatePlaylist(id,updatedDetails){
-        console.log("Updaing...",updatedDetails);
         try {
             const response = await fetch(`http://localhost:3001/api/update/playlist/${id}`, {
                 method: 'PUT',
@@ -250,7 +251,7 @@ class DataManager {
             }
 
             const playlist = await response.json();
-            console.log("User updated:", playlist);
+            return playlist;
         } catch (error) {
             console.error("Error updating profile:", error);
             throw error;
@@ -311,7 +312,6 @@ class DataManager {
             }
 
             const updatedPlaylist = await response.json();
-            console.log('Playlist songs updated:', updatedPlaylist);
             return updatedPlaylist;
         } catch (error) {
             console.error('Error updating playlist songs:', error);
@@ -390,7 +390,6 @@ class DataManager {
 
             const updatedUser = await response.json();
             sessionStorage.setItem('userData', JSON.stringify(updatedUser));
-            console.log("updated user",updatedUser);
             return updatedUser.playlists_saved.includes(playlistId);
         } catch (error) {
             console.error("Error saving playlist:", error);
@@ -430,7 +429,6 @@ class DataManager {
             const result = await response.json();
             const updatedUser = result.user;
             sessionStorage.setItem('userData', JSON.stringify(updatedUser));
-            console.log("updated user",updatedUser);
             return result;
         } catch (error) {
             console.error('Error adding playlist:', error);
@@ -472,7 +470,6 @@ class DataManager {
           }
 
           const data = await response.json();
-          console.log('Updated Playlist:', data);
           return data;
         } catch (error) {
           console.error('Error removing song:', error);

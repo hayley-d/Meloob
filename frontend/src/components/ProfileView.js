@@ -1,6 +1,41 @@
 import React, {useEffect, useState} from 'react';
 import dataManager from '../utils/dataManager';
 import {useNavigate, useParams} from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
+function MyVerticallyCenteredModal(props) {
+    return (
+        <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Following
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body style={{fontSize: "16px"}}>
+                {
+                    props.friends.length > 0 ? (
+                        props.friends.map((friend, index) => (
+                            <p key={index}>
+                                {friend.username}
+                            </p>
+                        ))
+                    ) : (
+                        <p>No friends found</p>
+                    )
+                }
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
 
 export function ProfileView() {
     const {id} = useParams();
@@ -9,22 +44,25 @@ export function ProfileView() {
     const [sessionEmail, setSessionEmail] = useState('');
     const [sessionUser, setSessionUser] = useState('');
     const [isFollowing, setIsFollowing] = useState(false);
-    const navigate = useNavigate(); // Use navigate for redirection
+    const navigate = useNavigate();
+    const [modalShow, setModalShow] = React.useState(false);
+    const [friends, setFriends] = React.useState([]);
 
     useEffect(() => {
         const email = sessionStorage.getItem('user');
-        setSessionUser(sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')): '');
+        setSessionUser(sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')) : '');
         setSessionEmail(email ? JSON.parse(email) : '');
 
         const fetchUser = async () => {
             try {
                 const user = await dataManager.getUser(id);
-                console.log("User retrieved:", user); // Log the retrieved user
                 setUser(user);
+                const friends = await getFollowing(user.following);
+                setFriends(friends);
             } catch (error) {
                 console.error("Error fetching user:", error);
             } finally {
-                setIsLoading(false); // Set loading to false regardless of success or failure
+                setIsLoading(false);
             }
         };
 
@@ -33,20 +71,16 @@ export function ProfileView() {
 
     useEffect(() => {
         if (user && sessionEmail) {
-            console.log("Current Email:", sessionEmail);
-            console.log("Profile Email:", user.email);
+            
         }
     }, [user, sessionEmail]);
 
     const handleFollow = async () => {
         try {
-            // Fetch the logged-in user from session storage
             const currentUser = JSON.parse(sessionStorage.getItem('userData'))
-            console.log("Retrieved",currentUser)
-            const newInfo = await dataManager.updateUserFollowing(currentUser._id,user.id);
+            const newInfo = await dataManager.updateUserFollowing(currentUser._id, user.id);
             setUser(newInfo);
             setIsFollowing(true);
-            console.log("Followed user successfully!");
 
         } catch (error) {
             console.error("Error following user:", error);
@@ -57,6 +91,16 @@ export function ProfileView() {
         navigate(`/edit-profile/${id}`);
     };
 
+    const getFollowing = async () => {
+        try {
+            const currentUser = JSON.parse(sessionStorage.getItem('userData'))
+            const following = await dataManager.getFollowing(currentUser.following);
+            return following;
+        } catch (error) {
+            console.error("Error retrieving user's following list:", error);
+        }
+    }
+
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -66,9 +110,7 @@ export function ProfileView() {
         return <div>User not found</div>;
     }
 
-    // Check if the logged-in user is the same as the profile user
     const isOwner = sessionEmail === user.email;
-    //const isFollowing = sessionUser ? sessionUser.following.includes(user.id) : false;
 
     return (
         <div className="container-fluid" style={{
@@ -96,27 +138,49 @@ export function ProfileView() {
                     <div className="profile-user-img"
                          style={{gridRow: "span 3", backgroundImage: `url(${user.profile_picture})`}}></div>
                     <div><h2 style={{fontSize: "30px", fontWeight: "bold"}}>{user.username}</h2></div>
-                    <div style={{
-                        display: "grid", gridTemplateColumns: "1fr 1fr",
-                        gridTemplateRows: "1fr 1fr",
-                        gap: "10px",
-                        fontSize: "20px"
-                    }}>
-                        <div>{user.playlists_created.length}</div>
-                        <div className="follower-btn">{user.followers.length}</div>
-                        <div>Playlists</div>
-                        <div className="follower-btn">Followers</div>
-                    </div>
+                    {isOwner ? (
+                        <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            gridTemplateRows: "1fr 1fr",
+                            gap: "10px",
+                            fontSize: "20px"
+                        }}>
+                            <div>{user.playlists_created.length}</div>
+                            <div className="follower-btn"
+                                 style={{cursor: "pointer"}}
+                                 onClick={() => setModalShow(true)}>{user.followers.length}</div>
+                            <div>Playlists</div>
+                            <div className="follower-btn" style={{cursor: "pointer"}}
+                                 onClick={() => setModalShow(true)}>Followers
+                            </div>
+                        </div>
+                    ) : (
+                        <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            gridTemplateRows: "1fr 1fr",
+                            gap: "10px",
+                            fontSize: "20px"
+                        }}>
+                            <div>{user.playlists_created.length}</div>
+                            <div className="follower-btn">{user.followers.length}</div>
+                            <div>Playlists</div>
+                            <div className="follower-btn">Followers</div>
+                        </div>
+                    )}
                     <div style={{display: "flex", alignItems: "center", justifyContent: "left"}}>
                         {isOwner ? (
-                            <button onClick={handleEditProfile} className="btn" style={{backgroundColor: "#ff70a6", color: "white"}}>Edit
+                            <button onClick={handleEditProfile} className="btn"
+                                    style={{backgroundColor: "#ff70a6", color: "white"}}>Edit
                                 Profile</button>
                         ) : (
                             !isFollowing ? (
                                 <button className="btn" style={{backgroundColor: "#70d6ff", color: "white"}}
                                         onClick={handleFollow}>Follow</button>
                             ) : (
-                                <button className="btn" style={{backgroundColor: "grey", color: "white"}}>Following</button>
+                                <button className="btn"
+                                        style={{backgroundColor: "grey", color: "white"}}>Following</button>
                             )
                         )}
                     </div>
@@ -125,6 +189,12 @@ export function ProfileView() {
                     <p>{user.description}</p>
                 </div>
             </div>
+            <MyVerticallyCenteredModal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                friends={friends}
+            />
         </div>
-    );
+    )
+        ;
 }

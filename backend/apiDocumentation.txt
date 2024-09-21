@@ -1,0 +1,43 @@
+
+# Meloob API
+
+API documentation for the available api routes.
+
+
+## Signup
+
+#### Used to add the new user to the database.
+
+```http
+  POST /api/signup
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `username`      | `string` | **Required**. Username of the user |
+| `email`      | `string` | **Required**. Email address of the new user |
+| `password`      | `string` | **Required**. Password hashed using Argon2i |
+| `profile_picture`      | `string` | **Required**. Url of the user's chosen profile image |
+| `followers`      | `array` | **Required**. Empty array |
+| `following`      | `array` | **Required**. Empty array |
+| `playlists_created`      | `array` | **Required**. Empty array |
+| `playlists_saved`      | `array` | **Required**. Empty array |
+| `description`      | `string` | **Required**. Empty string |
+
+#### Return Example
+```http
+{
+    "id": "64e3f1bc9f12a61d2c5a4c58",
+    "username": "newuser",
+    "email": "newuser@example.com",
+    "password": "hashedPassword",
+    "profile_picture": "profilePic.jpg",
+    "followers": [],
+    "following": [],
+    "playlists_created": [],
+    "playlists_saved": [],
+    "description": "New user bio."
+  }
+```
+
+
+

@@ -15,7 +15,6 @@ import dataManager from "../utils/dataManager";
      async getUser() {
          try {
              const userEmail = JSON.parse(sessionStorage.getItem("user"));
-             console.log("Email",userEmail);
              if (userEmail) {
                  const user = await dataManager.getUserByEmail(userEmail);
                  this.setState({ user, isLoading: false });
@@ -32,10 +31,8 @@ import dataManager from "../utils/dataManager";
          if(this.props.location !== 'splash'){
              await this.getUser();
              const userEmail = JSON.parse(sessionStorage.getItem("user"));
-             //console.log("Email",userEmail);
-             //console.log("Home page");
          } else{
-             //console.log("Splash page");
+
          }
 
      }
@@ -43,13 +40,13 @@ import dataManager from "../utils/dataManager";
      render(){
          const { location } = this.props;
          const { user, isLoading } = this.state
-         //console.log("User",this.state.user);
+
       return(
           <nav className="navigation navbar container-fluid ">
               <div className="container-fluid navdiv">
                   <div id="logo"></div>
                   {location === 'splash' ? (
-                      <NavLink className="navlink" to='/login'>Login</NavLink> // Show login link on home page
+                      <NavLink className="navlink" to='/login'>Login</NavLink>
                   ) : (
                       <>
                           <NavLink className="navlink" to='/home'>Home</NavLink>
