@@ -1364,5 +1364,89 @@ userRoutes.delete('/user/:userId/follower/:followerId', async (req, res) => {
     }
 });
 
+/**
+ * Fetches playlists based on an array of user IDs.
+ *
+ * This route retrieves multiple playlists created by the provided user IDs.
+ * It returns the playlist data in a formatted array, including relevant playlist details.
+ *
+ * @route POST /api/playlists/by-users
+ * @param {Array<string>} req.body.userIds - The array of user IDs to retrieve playlists for.
+ * @returns {Array<Object>} - A formatted array of playlist objects.
+ * @throws {Error} - Returns an error message if the retrieval fails.
+ *
+ * @example
+ * // Request body example:
+ * {
+ *   "userIds": ["60f9abc124ef9d29e9a1", "60f9abc124ef9d29e9b2"]
+ * }
+ *
+ * // Successful response:
+ * [
+ *   {
+ *     "id": "60f9cfcf123abc124ef9d29",
+ *     "userId": "60f9abc124ef9d29e9a1",
+ *     "coverImage": "http://imageurl.com/cover1.jpg",
+ *     "date_created": "2024-09-10",
+ *     "genre": "Pop",
+ *     "name": "Chill Vibes",
+ *     "description": "A chill playlist for relaxed evenings",
+ *     "hashtags": ["#chill", "#relax"],
+ *     "songs": ["songId1", "songId2"]
+ *   },
+ *   {
+ *     "id": "60f9d0f123abdef1250aa29",
+ *     "userId": "60f9abc124ef9d29e9b2",
+ *     "coverImage": "http://imageurl.com/cover2.jpg",
+ *     "date_created": "2024-09-11",
+ *     "genre": "Rock",
+ *     "name": "Rock On",
+ *     "description": "Energetic rock songs to boost your mood",
+ *     "hashtags": ["#rock", "#energy"],
+ *     "songs": ["songId3", "songId4"]
+ *   }
+ * ]
+ */
+userRoutes.post('/playlists/by-users', async (req, res) => {
+    const { userIds } = req.body;
+
+    if (!userIds || userIds.length === 0) {
+        return res.status(400).json({ message: 'User IDs are required' });
+    }
+
+    try {
+        const playlists = await Playlist.find({
+            userId: { $in: userIds }
+        }).exec();
+
+        const genres = await Genre.find().exec();
+
+        if (playlists.length === 0) {
+            return res.status(404).json({ message: 'No playlists found for the provided user IDs' });
+        }
+
+        const formatted = playlists.map(playlist => {
+            const genre_name = genres.find(g => g._id.toString() === playlist.genre.toString());
+
+            return {
+                id: playlist._id.toString(),
+                userId: playlist.userId,
+                coverImage: playlist.coverImage,
+                date_created: playlist.date_created,
+                genre: genre_name ? genre_name.name : 'Unknown',
+                name: playlist.name,
+                description: playlist.description,
+                hashtags: playlist.hashtags,
+                songs: playlist.songs
+            };
+        });
+        //console.log(formatted);
+        res.status(200).json(formatted);
+    } catch (error) {
+        console.error('Error fetching playlists by user IDs:', error);
+        res.status(500).json({ message: 'Error fetching playlists', error: error.message });
+    }
+});
+
 
 module.exports = userRoutes;

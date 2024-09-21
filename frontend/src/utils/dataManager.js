@@ -494,6 +494,46 @@ class DataManager {
         }
     }
 
+    /**
+     * Fetches playlists for a given array of user IDs.
+     *
+     * @param {Array<string>} userIds - Array of user IDs for which playlists need to be fetched.
+     * @returns {Promise<Array>} - A promise that resolves to an array of playlist objects.
+     * @throws {Error} - Throws an error if the request fails.
+     */
+    async fetchPlaylistsByUserIds (userIds) {
+        try {
+            const response = await fetch('/api/playlists/by-users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userIds })
+            }).then(response => response.json())
+                .then(async data => {
+                    const updatedPlaylists = await Promise.all(
+                        data.map(async playlist => {
+                            playlist.user = await dataManager.getUser(playlist.userId);
+                            return playlist;
+                        })
+                    );
+                    return updatedPlaylists;
+                });
+
+           /* if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error fetching playlists');
+            }*/
+
+            //const data = await response.json();
+           // console.log(response);
+            return response;
+        } catch (error) {
+            console.error('Error fetching playlists by user IDs:', error);
+            throw new Error(error.message);
+        }
+    }
+
 
 }
 

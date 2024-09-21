@@ -26,7 +26,15 @@ export class Home extends React.Component {
 
     async fetchPlaylists() {
         try {
-            const playlists = await dataManager.getPlaylists();
+            const user = JSON.parse(sessionStorage.getItem("userData"));
+            const playlists = await dataManager.fetchPlaylistsByUserIds(user.following);
+            playlists.sort((a, b) => {
+                const [dayA, monthA, yearA] = a.date_created.split('/');
+                const [dayB, monthB, yearB] = b.date_created.split('/');
+                const dateA = new Date(`20${yearA}-${monthA}-${dayA}`);
+                const dateB = new Date(`20${yearB}-${monthB}-${dayB}`);
+                return dateB - dateA;
+            });
             this.setState({
                 playlists: playlists,
             });
