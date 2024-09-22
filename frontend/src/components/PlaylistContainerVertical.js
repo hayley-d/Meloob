@@ -98,26 +98,15 @@ import dataManager from "../utils/dataManager";
         }
 
         return (
-            <div className="container-fluid"
-                 style={{display: "flex",flexDirection:"column", gap: "30px", justifyContent: "center", alignItems: "center"}}>
+            <div className="playlist-container-vertical container-fluid">
                 <Scrollbar style={{width: "25vw", height: "40vh", gap: "50px"}}>
                     {this.props.playlists.map((playlist, index) => (
-                        <PlaylistPreview
-                            key={index}
-                            playlist={playlist}
-                            handleSelect={this.handleSelectPlaylist}
-                        />
+                        <PlaylistPreview key={index} playlist={playlist} handleSelect={this.handleSelectPlaylist}/>
                     ))}
                 </Scrollbar>
-                <div>
-                    <button onClick={this.handleAddSong} className="btn back-btn"
-                            style={{backgroundColor: "#ff70a6", color: "white"}}>
-                        Add Song
-                    </button>
-                    <button onClick={this.createNewPlaylist} className="btn back-btn"
-                            style={{backgroundColor: "#70d6ff", color: "white"}}>
-                        Create new Playlist
-                    </button>
+                <div className="playlist-vertical-button-container">
+                    <button onClick={this.handleAddSong} className="button">Add Song</button>
+                    <button onClick={this.createNewPlaylist} className="button">Create new Playlist</button>
                 </div>
 
             </div>

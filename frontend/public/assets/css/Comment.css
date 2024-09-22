@@ -1,0 +1,66 @@
+.comment-card{
+    background-color: #70d6ff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    height:fit-content;
+    min-width:100px;
+    padding:10px;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    font-size: 15px;
+}
+
+.comment-image{
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 80px;
+    height:80px;
+    border-radius: 10%;
+}
+
+.comment-username{
+    font-family: "Montserrat", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none !important;
+}
+
+.comment-content{
+    font-family: "Montserrat", sans-serif;
+    color:white;
+    font-size: 18px;
+}
+
+.comment-header{
+    font-family: "Montserrat", sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap:1px;
+
+}
+
+.comment-username-link{
+    text-decoration:none !important;
+    color:#28282f;
+}
+
+.comment-username-link:hover,.comment-username:hover{
+    color:#28282f;
+}
+
+
+.comment-date{
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+    color: grey;
+}
+
+.comment-container{
+    display: flex;
+    flex-direction:column;
+    gap: 30px;
+    justify-content: center;
+    align-items: center
+}

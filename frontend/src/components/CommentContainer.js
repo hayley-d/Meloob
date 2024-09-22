@@ -30,7 +30,6 @@ export class CommentContainer extends Component {
 
     constructor(props) {
         super(props);
-        //this.comments = this.props.comments;
     }
 
     render() {
@@ -39,15 +38,9 @@ export class CommentContainer extends Component {
         }
 
         return (
-            <div className="container-fluid"
-                 style={{display: "flex",flexDirection:"column", gap: "30px", justifyContent: "center", alignItems: "center"}}>
+            <div className=" comment-container container-fluid">
                 <Scrollbar style={{width: "40vw", height: "40vh", gap: "50px"}}>
-                    {this.props.comments.map((comment, index) => (
-                        <Comment
-                            key={index}
-                            comment={comment}
-                        />
-                    ))}
+                    {this.props.comments.map((comment, index) => (<Comment key={index} comment={comment}/>))}
                 </Scrollbar>
             </div>
         );

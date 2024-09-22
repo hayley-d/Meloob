@@ -1,0 +1,28 @@
+.footer-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.footer-sub-container,.footer-sub-container2{
+    background-color: #70d6ff;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.footer-sub-container2{
+    background-color: #ff70a6;
+}
+
+.footer-link{
+    color: white;
+    text-decoration: none !important;
+    font-size: 16px;
+}
+
+.footer-link:hover{
+    color: white;
+}

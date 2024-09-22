@@ -1,41 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import dataManager from '../utils/dataManager';
 import {useNavigate, useParams} from "react-router-dom";
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-
-function MyVerticallyCenteredModal(props) {
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Followers
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body style={{fontSize: "16px"}}>
-                {
-                    props.friends.length > 0 ? (
-                        props.friends.map((friend, index) => (
-                            <p key={index}>
-                                {friend.username}
-                            </p>
-                        ))
-                    ) : (
-                        <p>No friends found</p>
-                    )
-                }
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
+import {Modal} from './Modal';
 
 export function ProfileView({onFollow}) {
     const {id} = useParams();
@@ -168,94 +134,57 @@ export function ProfileView({onFollow}) {
     const isOwner = sessionEmail === user.email;
 
     return (
-        <div className="container-fluid" style={{
-            marginTop: "30px",
-            marginBottom: "30px",
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: "100vw",
-            justifyContent: "center",
-            height: "fit-content"
-        }}>
-            <div className="profile-card" style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "30px",
-                justifyContent: "center",
-            }}>
-                <div className="profile-header" style={{
-                    display: "grid",
-                    gridTemplateColumns: "2fr 3fr",
-                    gridTemplateRows: "1fr 1fr 1fr",
-                    gap: "30px"
-                }}>
-                    <div className="profile-user-img"
-                         style={{gridRow: "span 3", backgroundImage: `url(${user.profile_picture})`}}></div>
-                    <div><h2 style={{fontSize: "30px", fontWeight: "bold"}}>{user.username}</h2></div>
+        <div className="container-fluid profile-page-container">
+            <div className="profile-page-card">
+                <div className="profile-header">
+                    <div className="profile-page-picture" style={{backgroundImage: `url(${user.profile_picture})`}}></div>
+                    <div>
+                        <h2 className="profile-username">{user.username}</h2>
+                    </div>
                     {isFollowing ? (
-                        <div style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
-                            gridTemplateRows: "1fr 1fr",
-                            gap: "10px",
-                            fontSize: "20px"
-                        }}>
+                        <div className="profile-stats-container">
                             <div>{user.playlists_created.length}</div>
-                            <div className="follower-btn"
-                                 style={{cursor: "pointer"}}
-                                 onClick={() => setModalShow(true)}>{length}</div>
+                            <div className="follower-btn" onClick={() => setModalShow(true)}>{length}</div>
                             <div>Playlists</div>
-                            <div className="follower-btn" style={{cursor: "pointer"}}
-                                 onClick={() => setModalShow(true)}>Followers
+                            <div className="follower-btn" onClick={() => setModalShow(true)}>Followers</div>
+                        </div>
+                    ) : ( isOwner ? (
+                            <div className="profile-stats-container">
+                                <div>{user.playlists_created.length}</div>
+                                <div className="follower-btn" onClick={() => setModalShow(true)}>{length}</div>
+                                <div>Playlists</div>
+                                <div className="follower-btn" onClick={() => setModalShow(true)}>Followers</div>
                             </div>
-                        </div>
-                    ) : (
-                        <div style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
-                            gridTemplateRows: "1fr 1fr",
-                            gap: "10px",
-                            fontSize: "20px"
-                        }}>
+                        ) : (
+                        <div className="user-stats-container">
                             <div>{user.playlists_created.length}</div>
-                            <div className="follower-btn">{user.followers.length}</div>
+                            <div>{user.followers.length}</div>
                             <div>Playlists</div>
-                            <div className="follower-btn">Followers</div>
-                        </div>
+                            <div>Followers</div>
+                        </div>)
                     )}
-                    <div style={{display: "flex", alignItems: "center", justifyContent: "left"}}>
+                    <div className="profile-button-container">
                         {isOwner ? (
-                            <button onClick={handleEditProfile} className="btn"
-                                    style={{backgroundColor: "#ff70a6", color: "white"}}>Edit
-                                Profile</button>
+                            <button onClick={handleEditProfile} className="edit-profile-button">Edit Profile</button>
                         ) : (
                             !isFollowing ? (
-                                <button className="btn" style={{backgroundColor: "#70d6ff", color: "white"}}
-                                        onClick={handleFollow}>Follow</button>
+                                <button className="follow-button" onClick={handleFollow}>Follow</button>
                             ) : (
-                                <button className="btn" onClick={handelUnfollow}
-                                        style={{backgroundColor: "grey", color: "white"}}>Following</button>
+                                <button className="following-button" onClick={handelUnfollow}>Unfollow</button>
                             )
                         )}
                     </div>
                     <div>
                         {
-                            isOwner ? null : (
-                                friend ? (<p>This user follows you</p>) : null
-                            )
+                            isOwner ? null : (friend ? (<p>This user follows you</p>) : null)
                         }
                     </div>
                 </div>
-                <div className="profile-desc" style={{fontSize: "20px"}}>
+                <div className="profile-desc">
                     <p>{user.description}</p>
                 </div>
             </div>
-            <MyVerticallyCenteredModal
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-                friends={followers}
-            />
+            <Modal show={modalShow} onHide={() => setModalShow(false)} friends={followers}/>
         </div>
     )
         ;

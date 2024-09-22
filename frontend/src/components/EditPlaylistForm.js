@@ -173,7 +173,7 @@ export function EditPlaylistForm() {
 
     return (
         <div className="container">
-            <h2>Edit Playlist</h2>
+            <h2 className="form-heading">Edit Playlist</h2>
             <form>
                 <div className="image-container">
                     <div className="form-profile-image" style={{backgroundImage: `url(${coverImageUrl})`,}}></div>

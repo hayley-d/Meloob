@@ -89,7 +89,7 @@ export function EditProfileForm() {
 
     return (
         <div className="container">
-            <h2>Edit Profile</h2>
+            <h2 className="form-heading">Edit Profile</h2>
             <form onSubmit={handleFormSubmit}>
                 <div className="image-container">
                     <div className="form-profile-image" style={{backgroundImage:`url(${profileImageUrl})`}}>

@@ -10,7 +10,7 @@ export function SignupForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate(); // Use navigate for redirection
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const {name, value} = e.target;

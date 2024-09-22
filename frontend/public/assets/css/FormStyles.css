@@ -178,3 +178,9 @@ input, textarea, select{
     justify-content: center;
     gap:50px;
 }
+
+.form-heading{
+    font-family: "Concert One", sans-serif;
+    font-size: 70px;
+    color: #70d6ff;
+}

@@ -20,10 +20,6 @@ export function AddPlaylistForm() {
     const [coverImageUrl, setCoverImageUrl] = useState('https://opensource.com/sites/default/files/lead-images/rust_programming_crab_sea.png');
     const [selectedGenreOption, setSelectedGenreOption] = useState('1');
 
-    useEffect(() => {
-       // console.log("Form data updated:", formData);
-    }, [formData]);
-
     /**
      * Handle changes to input fields.
      * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} e - The change event.
@@ -58,8 +54,6 @@ export function AddPlaylistForm() {
             setErrors(validationErrors);
             return;
         }
-
-       // console.log("Submitting",formData);
 
         try {
             const response = await dataManager.addPlaylist(formData.userId,formData);
@@ -104,23 +98,6 @@ export function AddPlaylistForm() {
             setFormData({ ...formData, coverImage: '' });
             setCoverImageUrl('https://octodex.github.com/images/vinyltocat.png');
         }
-
-        /*try {
-            const response = await fetch(url, {mode: 'no-cors'}).catch((error) => {
-                setFormData({ ...formData, coverImage: '' });
-                setCoverImageUrl('https://octodex.github.com/images/vinyltocat.png');
-            });
-            if (response.ok) {
-                setFormData({ ...formData, coverImage: url });
-                setCoverImageUrl(url);
-            } else {
-                throw new Error('Image not found');
-            }
-        } catch (error) {
-            console.error('Error loading image:', error);
-            setFormData({ ...formData, coverImage: '' });
-            setCoverImageUrl('https://octodex.github.com/images/vinyltocat.png');
-        }*/
     };
 
     /**
@@ -191,7 +168,7 @@ export function AddPlaylistForm() {
 
     return (
         <div className="container">
-            <h2>Add Playlist</h2>
+            <h2 className="form-heading">Add Playlist</h2>
             <form onSubmit={handleFormSubmit}>
                 <div className="image-container">
                     <div className="add-playlist-image" style={{backgroundImage: `url(${coverImageUrl})`}}></div>

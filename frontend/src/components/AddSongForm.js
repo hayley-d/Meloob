@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import dataManager from '../utils/dataManager';
 import { Validator } from "../utils/Validator";
 import '../../public/assets/css/FormStyles.css';
@@ -53,19 +53,6 @@ export function AddSongForm() {
         const url = e.target.value;
         setFormData({ ...formData, link: url });
         setLinkUrl(url);
-        /*try {
-            const response = await fetch(url, { method: 'GET',mode: 'no-cors' });
-            if (response.ok) {
-                setFormData({ ...formData, link: url });
-                setLinkUrl(url);
-            } else {
-                throw new Error('Link not found');
-            }
-        } catch (error) {
-
-            setFormData({ ...formData, link: '' });
-            setLinkUrl('');
-        }*/
     };
 
     /**
@@ -132,7 +119,7 @@ export function AddSongForm() {
 
     return (
         <div className="container">
-            <h2>Add Song</h2>
+            <h2 className="form-heading">Add Song</h2>
             <form onSubmit={handleFormSubmit}>
                 <div className="input-group">
                     <label htmlFor="title" className="label">Title</label>

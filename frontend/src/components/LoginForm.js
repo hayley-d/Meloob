@@ -50,7 +50,7 @@ export function LoginForm() {
 
     return (
         <div className="login-form-container">
-            <h3 className="heading" >Login</h3>
+            <h3 className="form-heading" >Login</h3>
             <form onSubmit={handleSubmit}>
                 <div className={`input-group ${errors.email ? 'input-error' : ''}`}>
                     <label className="label" htmlFor="email">Email Address</label>

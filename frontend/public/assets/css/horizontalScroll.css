@@ -21,7 +21,6 @@
     align-items: center;
     gap: 5vw;
     margin-right: 40px;
-
 }
 
 .action-btns {
@@ -285,38 +284,7 @@ svg:hover{
     cursor: pointer;
 }
 
-.comment-card{
-    background-color: #70d6ff;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
 
-    height:fit-content;
-    min-width:100px;
-    padding:10px;
-    margin-bottom: 40px;
-    margin-top: 40px;
-    font-size: 15px;
-}
-
-.comment-image{
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    width: 80px;
-    height:80px;
-    border-radius: 10%;
-}
-
-.comment-username{
-    font-size: 15px;
-    font-weight: bold;
-}
-
-.comment-content{
-    color:white;
-    font-size: 15px;
-}
 
 .search-bar-input{
     border-radius: 10px;

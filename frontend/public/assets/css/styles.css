@@ -2,3 +2,329 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+    color:#28282f;
+}
+
+.horizontal-outer-container{
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+    justify-content:center;
+    align-items:center;
+}
+
+.horizontal-mid-container{
+    width: 80vw;
+    height:80vh;
+}
+
+.content-box-horizontal-playlists{
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    gap: 5vw;
+    margin-right: 40px;
+    height: fit-content;
+}
+
+.playlist-container-vertical{
+    display: flex;
+    flex-direction:column;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+.playlist-preview-card{
+    background-color: white;
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 2fr 1fr ;
+    height:fit-content;
+    min-width:400px;
+    max-width:400px;
+    padding:10px;
+    margin-top:3vh;
+    margin-bottom:3vh;
+}
+
+.playlist-preview-card-header{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    text-align: center;
+}
+
+.playlist-preview-card-name{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.playlist-preview-card-date-container{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.playlist-preview-card-date{
+    font-size: 14px;
+    color: grey;
+}
+
+.playlist-full-card{
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.playlist-full-card-header{
+    display: grid;
+    grid-template-rows: 1fr 2fr 1fr;
+    grid-template-columns: 2fr 1fr;
+}
+
+.playlist-full-card-header-svg{
+    display: flex;
+    justify-content: right;
+}
+
+.playlist-full-card-name-container{
+    display: flex;
+    align-items: center;
+}
+
+.playlist-full-card-name{
+    font-weight: bold;
+    font-size: 30px;
+    color: #28282f;
+}
+
+.playlist-full-card-genre-container{
+    display: flex;
+    justify-content: right;
+    padding: 10px;
+}
+
+
+.playlist-full-card-genre-tag{
+    background-color: #ff70a6;
+    color: white;
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px;
+    height: 5vh;
+}
+
+.playlist-full-card-genre{
+    font-size: 20px;
+    text-align: center;
+    color: white;
+}
+
+.playlist-full-user-link{
+    grid-column: span 2;
+    font-size: 20px;
+    color: #28282f;
+    cursor: pointer;
+}
+
+.playlist-full-card-picture{
+    width:100%;
+    border-radius: 20px;
+    height: 50vh;
+}
+
+.playlist-full-description-container{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.playlist-full-description{
+    font-size: 18px;
+    color: #28282f
+}
+
+.playlist-large-card-container {
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 100%;
+    min-width: 380px;
+    padding: 20px;
+    cursor: pointer;
+    width: 18rem;
+}
+
+
+.playlist-large-card-username{
+    color: #28282f;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.playlist-large-genre-container{
+    display: flex;
+    gap: .7rem;
+    height: 10%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.playlist-large-sub-card{
+    flex: 1 1 auto;
+    padding: 10px 10px;
+    color: white;
+    display: grid;
+    grid-template-rows: 2fr 1fr 1fr;
+    flex-direction: column;
+    gap:10px;
+}
+
+.playlist-large-image{
+    width:100%;
+    height:25vh;
+    border-radius: 20px;
+}
+
+.playlist-large-card-title{
+    color: #28282f;
+    font-size: 25px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+    font-weight: bold;
+}
+
+.profile-desc{
+    font-size: 20px;
+}
+
+.follow-button{
+    font-family: "Montserrat", sans-serif;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width:40%;
+    min-width: fit-content;
+    background-color: #70d6ff;
+}
+
+.following-button{
+    font-family: "Montserrat", sans-serif;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width:40%;
+    min-width: fit-content;
+    background-color: grey !important;
+}
+
+.edit-profile-button{
+    font-family: "Montserrat", sans-serif;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width:40%;
+    min-width: fit-content;
+    background-color: #ff70a6 !important;
+}
+
+.profile-button-container{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.user-stats-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    font-size: 20px;
+}
+
+.follower-btn{
+    cursor: pointer;
+}
+
+.profile-stats-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    font-size: 20px;
+}
+
+.profile-username{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.profile-page-picture{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    height:100%;
+    width:100%;
+    grid-row: span 3;
+}
+
+.profile-header{
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 30px;
+}
+
+.profile-page-card{
+    background-color: white;
+    border-radius: 20px;
+    width:60vw;
+    height:50vh;
+    padding:30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+}
+
+.profile-page-container{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    justify-content: center;
+    height: fit-content;
+}
+
+.playlist-vertical-button-container{
+    display: flex;
+    gap:50px;
+}

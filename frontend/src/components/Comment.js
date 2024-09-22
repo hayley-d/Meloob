@@ -28,23 +28,19 @@ export function Comment({comment}) {
         <div className="comment-card">
             <div className="comment-header">
                 <div>
-                    <Link to={route} style={{textDecoration:'none',color:"black"}}>
-                        <h3 className="comment-username" title={comment.user.username} style={{textDecoration:'none'}}>
-                            {comment.user.username}
-                        </h3>
+                    <Link to={route} className="comment-username-link">
+                        <h3 className="comment-username" title={comment.user.username}>{comment.user.username}</h3>
                     </Link>
                 </div>
-                <div><p style={{fontSize: "14px", color: "grey"}}>{comment.date}</p></div>
+                <div>
+                    <p className="comment-date">{comment.date}</p>
+                </div>
             </div>
             <div className="comment-content">
                 {comment.content}
             </div>
-            {/*<div className="comment-image" style={{backgroundImage:`url(${comment.image})`}}>
-
-            </div>*/}
         </div>
     )
-        ;
 }
 
 
