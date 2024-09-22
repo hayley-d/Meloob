@@ -117,16 +117,7 @@ export function Playlist() {
     return (
         <div>
             <NavBar location="playlist"/>
-            <div style={{
-                display: "flex",
-                gap: "50px",
-                paddingLeft: "5vw",
-                paddingRight: "5vw",
-                paddingTop:"10vh",
-                alignItems: "center",
-                justifyContent:"center"
-
-            }}>
+            <div id="playlist-page-container">
                 <PlaylistPreviewFull playlist={playlist} onUpdate={updateComments}/>
                 <SongContainerVetical songs={songs} remove={remove} playlist={id} onRemove={removeSong}/>
             </div>

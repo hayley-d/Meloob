@@ -30,10 +30,6 @@ export class SongContainerVetical extends Component {
 
     constructor(props) {
         super(props);
-        this.songs = this.props.songs;
-        this.playlist = this.props.playlist;
-        this.remove = this.props.remove;
-        this.onRemove = this.props.onRemove;
     }
 
     async componentDidMount() {
@@ -46,13 +42,12 @@ export class SongContainerVetical extends Component {
         }
 
         return (
-            <div className="container-fluid"
-                 style={{display: "flex",flexDirection:"column", gap: "30px", justifyContent: "center", alignItems: "center"}}>
+            <div className="container-fluid song-container-outer">
                 <Scrollbar style={{width: "40vw", height: "80vh", gap: "50px"}}>
                     {this.props.songs.map((song, index) => (
                         <div key={index} style={{marginTop:"30px",marginBottom:"30px"}}>
                             <Song
-                                song={song} remove={this.remove} playlist={this.playlist} onRemove={this.onRemove}
+                                song={song} remove={this.props.remove} playlist={this.props.playlist} onRemove={this.props.onRemove}
                             />
                         </div>
                     ))}

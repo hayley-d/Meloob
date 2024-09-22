@@ -83,12 +83,12 @@ export class Home extends React.Component {
         return (
             <div>
                 <NavBar location="home"/>
-                <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
+                <div className="other-container">
                     <h3 className="home-heading">Activity</h3>
                     <hr/>
                 </div>
                 <PlaylistContainerHorizontal playlists={playlists}/>
-                <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
+                <div className="other-container">
                     <h3 className="home-heading" style={{color: "#ff9770"}}>Discover</h3>
                     <hr/>
                 </div>

@@ -328,3 +328,82 @@
     display: flex;
     gap:50px;
 }
+
+.search-bar-buttons{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    width:40px;
+}
+
+.search-bar-container-large{
+    width: 100%;
+    height: 15vh
+}
+
+.song-container-outer{
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+    justify-content:center;
+    align-items:center;
+}
+
+.song-container-mid{
+    width: 80vw;
+    height: 23vh;
+}
+
+.add-playlist-container{
+    padding:1rem;
+}
+
+.add-song-playlist{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap:50px;
+}
+
+.defalut-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.other-container{
+    width: 100vw;
+    height: fit-content;
+    padding-left: 10vw;
+}
+
+#playlist-page-container{
+    display: flex;
+    gap: 50px;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    padding-top: 10vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.song-playlist-heading-container{
+    width: 100vw;
+    height: fit-content;
+    padding-left: 10vw;
+}
+
+.song-playlist-heading{
+    color: white;
+    font-size: 30px;
+    font-family: "Concert One", sans-serif;
+    margin-top: 50px;
+    width: 40vw;
+    border-radius: 5px;
+}
+
+.add-playlist-container-inner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

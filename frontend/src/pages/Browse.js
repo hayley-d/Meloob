@@ -253,7 +253,7 @@ export function Browse() {
             <SearchBar onSearch={handleFuzzySearch} onCancel={cancelSearch} />
             {filteredPlaylists.length > 0 && (
                 <div>
-                    <div style={{ width: "100vw", height: "fit-content", paddingLeft: "10vw" }}>
+                    <div className="other-container">
                         <h3 className="home-heading">Playlists</h3>
                         <hr />
                     </div>
@@ -262,8 +262,8 @@ export function Browse() {
             )}
             {filteredSongs.length > 0 && (
                 <div>
-                    <div style={{ width: "100vw", height: "fit-content", paddingLeft: "10vw" }}>
-                        <h3 className="home-heading" style={{ color: "#ff9770" }}>Songs</h3>
+                    <div className="other-container">
+                        <h3 className="home-heading">Songs</h3>
                         <hr />
                     </div>
                     <SongContainer songs={filteredSongs} />

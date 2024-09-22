@@ -7,9 +7,9 @@ export class Login extends React.Component {
 
     render() {
         return (
-            <div style={{padding:'1rem'}}>
+            <div className="add-playlist-container">
                 <Link to="/" className="back-btn">Back</Link>
-                <div className="container-fluid" style={{display: 'flex', justifyContent: 'center',alignItems: 'center'}}>
+                <div className="container-fluid defalut-container">
                     <LoginForm />
                 </div>
             </div>

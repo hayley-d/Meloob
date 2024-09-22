@@ -61,13 +61,13 @@ export function AddSongToPlaylist() {
     }
 
     return (
-        <div style={{padding:'1rem', display: 'flex', justifyContent: 'center',flexDirection:"column",gap:"50px"}}>
+        <div className="add-playlist-container add-song-playlist">
             <div style={{width:"10vw"}}>
                 <Link to='/home' className="back-btn">Back</Link>
             </div>
 
-            <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
-                <h3 className="home-heading" style={{fontSize:"30px",color:"white"}}>Select Playlists To Add Song:</h3>
+            <div className="song-playlist-heading-container">
+                <h3 className="song-playlist-heading">Select Playlists To Add Song:</h3>
             </div>
             {playlists.length > 0 && (
                 <PlaylistContainerVertical playlists={playlists} songId={songId}/>

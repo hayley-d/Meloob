@@ -9,9 +9,9 @@ export class EditProfile extends React.Component {
         const userId = JSON.parse(sessionStorage.getItem('userData'))._id;
         const route = `/profile/${userId}`
         return (
-            <div style={{padding:'1rem'}}>
+            <div className="add-playlist-container">
                 <Link to={route} className="back-btn">Back</Link>
-                <div className="container-fluid" style={{display: 'flex', justifyContent: 'center',alignItems: 'center'}}>
+                <div className="container-fluid defalut-container" >
                     <EditProfileForm />
                 </div>
             </div>

@@ -211,6 +211,12 @@ hr{
     display: flex;
     gap: 10px;
     align-items: center;
+    text-align: center;
+}
+
+.song-card-footer{
+    font-size: 14px;
+    color: grey;
 }
 
 .song-link{
@@ -243,6 +249,8 @@ hr{
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 250px;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 svg:hover{
@@ -303,6 +311,11 @@ svg:hover{
     padding:10px;
     border-radius: 10px;
     background-color: white;
+    margin: 10vw;
+    font-size: 20px;
+    width: 80%;
+    display: grid;
+    grid-template-columns: 6fr 1fr 1fr;
 }
 
 .song-dots{

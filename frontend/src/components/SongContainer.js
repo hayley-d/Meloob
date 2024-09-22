@@ -30,15 +30,10 @@ export class SongContainer extends Component {
 
     render() {
         return (
-            <div className="container-fluid" style={{display:"flex",flexDirection:"column",gap:"30px",justifyContent:"center", alignItems:"center"}}>
+            <div className="container-fluid song-container-outer">
                 <div className="scroll-container">
                     <Scrollbar style={{width: " 80vw", height: "23vh"}}>
-                        <div
-                            ref={this.containerRef}
-                            style={{
-                                width: "80vw",
-                                height: "23vh",
-                            }}>
+                        <div ref={this.containerRef} className="song-container-mid">
 
                             <div className="content-box">
                                 {this.props.songs.map((song, index) => (
