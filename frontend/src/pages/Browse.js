@@ -210,42 +210,25 @@ export function Browse() {
 
 
     const handleFuzzySearch = (term) => {
-       /* console.log(term);
-        console.log(playlists)
-        const filteredPlaylists = playlists.filter(playlist => {
-            const nameMatch = playlist.name.toLowerCase().includes(term.toLowerCase());
-            const hashtagsMatch = playlist.hashtags.some(hashtag =>
-                hashtag.toLowerCase().includes(term.toLowerCase())
-            );
-            const matchGenre = playlist.genre.toLowerCase().includes(term.toLowerCase());
-            return nameMatch || hashtagsMatch || matchGenre;
-        });
-
-        const filteredSongs = songs.filter(song =>
-            song.title.toLowerCase().includes(term.toLowerCase())
-        );
-
-        setFilteredPlaylists(filteredPlaylists);
-        setFilteredSongs(filteredSongs);*/
-        // Define fuse options for playlists and songs
         const playlistOptions = {
-            keys: ['name', 'hashtags', 'genre'], // Fields to search in
-            threshold: 0.3 // Adjust for more or less strict matching
+            keys: ['name', 'hashtags', 'genre'],
+            threshold: 0.4,
+            tokenize: true,
+            matchAllTokens: false,
         };
         const songOptions = {
             keys: ['title'],
-            threshold: 0.3
+            threshold: 0.4,
+            tokenize: true,
+            matchAllTokens: false,
         };
 
-        // Create a Fuse instance for playlists and songs
         const playlistFuse = new Fuse(playlists, playlistOptions);
         const songFuse = new Fuse(songs, songOptions);
 
-        // Perform fuzzy search
         const filteredPlaylists = playlistFuse.search(term).map(result => result.item);
         const filteredSongs = songFuse.search(term).map(result => result.item);
 
-        // Update the filtered results
         setFilteredPlaylists(filteredPlaylists);
         setFilteredSongs(filteredSongs);
     };
