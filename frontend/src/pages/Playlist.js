@@ -22,9 +22,9 @@ export function Playlist() {
             try {
                 const playlist = await dataManager.getPlaylistByID(id);
                 setPlaylist(playlist);
-               // console.log(JSON.parse(sessionStorage.getItem('userData')).email,playlist.user.email);
+
                 const rem = JSON.parse(sessionStorage.getItem('userData')).email === playlist.user.email ? true:false;
-                //console.log(rem);
+
                 setRemove(rem);
 
                 if (playlist && Array.isArray(playlist.songs)) {
@@ -42,6 +42,30 @@ export function Playlist() {
 
         fetchPlaylist();
     }, [id]);
+
+    async function updateComments(){
+        const fetchPlaylist = async () => {
+            setIsLoading(true);
+            try {
+                const playlist = await dataManager.getPlaylistByID(id);
+                setPlaylist(playlist);
+                const rem = JSON.parse(sessionStorage.getItem('userData')).email === playlist.user.email ? true:false;
+                setRemove(rem);
+                if (playlist && Array.isArray(playlist.songs)) {
+                    const fetchedSongs = await fetchSongs(playlist.songs);
+                    setSongs(fetchedSongs);
+                } else {
+                    setSongs([]);
+                }
+            } catch (error) {
+                console.error("Error fetching playlist:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchPlaylist();
+    }
 
     async function fetchSongs(songIds) {
         try {
@@ -96,13 +120,14 @@ export function Playlist() {
             <div style={{
                 display: "flex",
                 gap: "50px",
-                paddingLeft: "30vw",
-                paddingRight: "30vw",
+                paddingLeft: "5vw",
+                paddingRight: "5vw",
                 paddingTop:"10vh",
                 alignItems: "center",
+                justifyContent:"center"
 
             }}>
-                <PlaylistPreviewFull playlist={playlist}/>
+                <PlaylistPreviewFull playlist={playlist} onUpdate={updateComments}/>
                 <SongContainerVetical songs={songs} remove={remove} playlist={id} onRemove={removeSong}/>
             </div>
         </div>

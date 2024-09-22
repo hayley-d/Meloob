@@ -3,6 +3,7 @@ body, #root{
     background-color: #28282f !important;
     height:fit-content;
     padding-bottom: 30px;
+    overflow-x: hidden;
 }
 
 a, a.active, .navdiv > a{

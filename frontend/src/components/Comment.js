@@ -20,7 +20,6 @@ import {Link} from "react-router-dom";
 export function Comment({comment}) {
     const route = `/profile/${comment.userId}`;
 
-    // Handle cases where comment or user data might not be available
     if (!comment || !comment.user) {
         return <div>Loading comment...</div>;
     }
@@ -40,6 +39,9 @@ export function Comment({comment}) {
             <div className="comment-content">
                 {comment.content}
             </div>
+            {/*<div className="comment-image" style={{backgroundImage:`url(${comment.image})`}}>
+
+            </div>*/}
         </div>
     )
         ;

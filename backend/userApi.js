@@ -549,7 +549,13 @@ userRoutes.get('/playlists/:playlistId', async (req, res) => {
                     user: commentUser ? commentUser : null
                 };
             }));
-
+            commentsWithUser.sort((a, b) => {
+                const [dayA, monthA, yearA] = a.date.split('/').map(Number);
+                const [dayB, monthB, yearB] = b.date.split('/').map(Number);
+                const dateA = new Date(`20${yearA}-${monthA}-${dayA}`);
+                const dateB = new Date(`20${yearB}-${monthB}-${dayB}`);
+                return dateB - dateA;
+            });
             formattedPlaylist.comments = commentsWithUser;
 
 
@@ -834,14 +840,14 @@ userRoutes.post('/playlists', async (req, res) => {
  */
 userRoutes.get('/comments/:playlistId', async (req, res) => {
     const { playlistId } = req.params;
-    console.log("Getting comments for ",playlistId);
+    //console.log("Getting comments for ",playlistId);
     try {
         const comments = await Comment.find({ playlistId }).exec();
         if (comments.length === 0) {
             res.status(200).json(comments);
         } else{
             // Loop through each comment and fetch associated user data
-            console.log(comments);
+            //console.log(comments);
             const commentsWithUser = await Promise.all(comments.map(async (comment) => {
                 const user = await User.findById(comment.userId).exec();
                 return {
@@ -849,6 +855,13 @@ userRoutes.get('/comments/:playlistId', async (req, res) => {
                     user: user ? user : null
                 };
             }));
+            commentsWithUser.sort((a, b) => {
+                const [dayA, monthA, yearA] = a.split('/').map(Number);
+                const [dayB, monthB, yearB] = b.split('/').map(Number);
+                const dateA = new Date(2000 + yearA, monthA - 1, dayA);
+                const dateB = new Date(2000 + yearB, monthB - 1, dayB);
+                return dateA - dateB;
+            });
             res.status(200).json(commentsWithUser);
         }
 
@@ -1498,6 +1511,48 @@ userRoutes.delete('/playlists/:playlistId', async (req, res) => {
     } catch (error) {
         console.error('Error deleting playlist:', error);
         res.status(500).json({ message: 'Error deleting playlist', error: error.message });
+    }
+});
+
+/**
+ * Add a comment to a specific playlist.
+ *
+ * This route allows users to add a comment to a playlist by providing the playlist ID,
+ * comment content, and the user ID. The new comment is saved in the database and returned
+ * in the response.
+ *
+ * @route POST /api/comments/:playlistId
+ * @param {string} req.params.playlistId - The ID of the playlist to which the comment is added.
+ * @param {Object} req.body - The comment data.
+ * @param {string} req.body.content - The content of the comment.
+ * @param {string} req.body.userId - The ID of the user adding the comment.
+ * @returns {Object} - The newly created comment object.
+ * @throws {Error} - Returns an error message if the creation fails.
+ */
+userRoutes.post('/comments/:playlistId', async (req, res) => {
+    const { playlistId } = req.params;
+    const { content, userId } = req.body;
+
+    if (!content || !userId) {
+        return res.status(400).json({ message: 'Content and userId are required.' });
+    }
+
+    const date = new Date();
+    const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
+
+    const newComment = new Comment({
+        content,
+        userId,
+        playlistId,
+        date: formattedDate,
+    });
+
+    try {
+        const savedComment = await newComment.save();
+        res.status(201).json(savedComment);
+    } catch (error) {
+        console.error('Error adding comment:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 

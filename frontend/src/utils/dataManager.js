@@ -570,7 +570,38 @@ class DataManager {
         }
     }
 
+    /**
+     * Adds a comment to a specific playlist.
+     *
+     * @param {string} playlistId - The ID of the playlist to which the comment is added.
+     * @param {Object} commentData - The data for the comment.
+     * @param {string} commentData.content - The content of the comment.
+     * @param {string} commentData.userId - The ID of the user adding the comment.
+     * @returns {Promise<Object>} - The newly created comment object.
+     * @throws {Error} - Throws an error if the request fails.
+     */
+    async addComment (playlistId, commentData) {
+        try {
+            const response = await fetch(`/api/comments/${playlistId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(commentData),
+            });
 
+            if (!response.ok) {
+                throw new Error('Failed to add comment');
+            }
+
+            const data = await response.json();
+            //console.log("New Comment:",data);
+            return data;
+        } catch (error) {
+            console.error("Error adding comment:", error);
+            throw new Error('Failed to add comment');
+        }
+    };
 
 }
 

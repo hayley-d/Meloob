@@ -30,11 +30,11 @@ export class CommentContainer extends Component {
 
     constructor(props) {
         super(props);
-        this.comments = this.props.comments;
+        //this.comments = this.props.comments;
     }
 
     render() {
-        if (!Array.isArray(this.comments)) {
+        if (!Array.isArray(this.props.comments)) {
             return <div>Error: Playlists data is not an array.</div>;
         }
 
@@ -42,7 +42,7 @@ export class CommentContainer extends Component {
             <div className="container-fluid"
                  style={{display: "flex",flexDirection:"column", gap: "30px", justifyContent: "center", alignItems: "center"}}>
                 <Scrollbar style={{width: "40vw", height: "40vh", gap: "50px"}}>
-                    {this.comments.map((comment, index) => (
+                    {this.props.comments.map((comment, index) => (
                         <Comment
                             key={index}
                             comment={comment}

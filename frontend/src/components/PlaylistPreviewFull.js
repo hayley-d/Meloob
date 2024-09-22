@@ -5,7 +5,7 @@ import {CommentContainer} from "./CommentContainer";
 import {AddComment} from "./AddComment";
 
 
-export function PlaylistPreviewFull({playlist}) {
+export function PlaylistPreviewFull({playlist,onUpdate}) {
     const navigate = useNavigate();
     const user = playlist.user;
     const [saved, setSaved] = useState(() => {
@@ -39,6 +39,16 @@ export function PlaylistPreviewFull({playlist}) {
     const toggleEdit = () => {
         navigate(`/edit-playlist/${playlist.id}`);
     }
+
+    const handleAddComment = async (commentData) => {
+        try {
+            //console.log("Making comment");
+            const newComment = await dataManager.addComment(playlist.id, commentData);
+            await onUpdate();
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+    };
 
     return (
         <div style={{
@@ -118,10 +128,10 @@ export function PlaylistPreviewFull({playlist}) {
 
             <div>
                 <h4>Comments</h4>
-                <CommentContainer comments={playlist.comments}/>
+                <CommentContainer comments={playlist.comments} />
             </div>
 
-            <AddComment/>
+            <AddComment onComment={handleAddComment}/>
 
 
         </div>

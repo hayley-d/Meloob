@@ -194,9 +194,9 @@ hr{
     /*gap:5px;*/
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 2fr 1fr ;
-    height:10vh;
-    min-width:20vw;
-    max-width:20vw;
+    height:fit-content;
+    min-width:400px;
+    max-width:400px;
     padding:10px;
 }
 
@@ -211,14 +211,15 @@ hr{
 .song-card-header{
     display: flex;
     gap: 10px;
-
     align-items: center;
 }
 
 .song-link{
+    min-width: 50px;
+    min-height: 50px;
     grid-row: span 2;
     border-radius: 10px;
-    padding: 10px 20px;
+    padding: 5px 5px;
     width:90%;
 
     color: white;
@@ -242,7 +243,7 @@ hr{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 12vw;
+    max-width: 250px;
 }
 
 svg:hover{
@@ -300,12 +301,20 @@ svg:hover{
     flex-direction: column;
 
     height:fit-content;
-    min-width:30vw;
-    max-width:30vw;
+    min-width:100px;
     padding:10px;
     margin-bottom: 40px;
     margin-top: 40px;
     font-size: 15px;
+}
+
+.comment-image{
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 80px;
+    height:80px;
+    border-radius: 10%;
 }
 
 .comment-username{
@@ -335,4 +344,15 @@ svg:hover{
     padding:10px;
     border-radius: 10px;
     background-color: white;
+}
+
+.song-dots{
+    display: flex;
+    max-height:20px;
+    max-width:24px;
+    min-height:20px;
+    min-width:24px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
