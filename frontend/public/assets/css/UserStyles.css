@@ -1,0 +1,47 @@
+.user-preview-card{
+    background-color: white;
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 2fr 1fr ;
+    height:120px;
+    min-width:400px;
+    max-width:400px;
+    padding:20px;
+}
+
+.user-preview-header{
+    display: flex;
+    align-items: start;
+    height: fit-content;
+
+}
+
+.user-preview-username{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #28282f;
+    cursor: pointer;
+}
+
+.user-preview-image{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height:80px;
+    width:80px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.user-preview-image-container{
+    
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    height: fit-content;
+}

@@ -32,6 +32,17 @@ class DataManager {
             });
     }
 
+    async getUsers() {
+        return await fetch('http://localhost:3001/api/users')
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => {
+                console.error('Error fetching users:', error);
+            });
+    }
+
     async getGenres() {
         return await fetch('http://localhost:3001/api/genres')
             .then(response => response.json())

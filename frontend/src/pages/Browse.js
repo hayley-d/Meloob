@@ -165,12 +165,15 @@ import { SongContainer } from "../components/SongContainer";
 import { SearchBar } from "../components/SearchBar";
 import { useSearchParams } from 'react-router-dom';
 import Fuse from "fuse.js";
+import {UserHorizontalContainer} from "../components/UserHorizontalContainer";
 
 export function Browse() {
     const [playlists, setPlaylists] = useState([]);
     const [songs, setSongs] = useState([]);
+    const [users, setUsers] = useState([]);
     const [filteredPlaylists, setFilteredPlaylists] = useState([]);
     const [filteredSongs, setFilteredSongs] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -181,8 +184,10 @@ export function Browse() {
             try {
                 const playlistsData = await dataManager.getPlaylists().finally();
                 const songsData = await dataManager.getSongs().finally();
+                const userData = await dataManager.getUsers().finally();
                 setPlaylists(playlistsData);
                 setSongs(songsData);
+                setUsers(userData);
             } catch (error) {
                 console.error("Error fetching data:", error);
                 setError("Failed to load data.");
@@ -203,9 +208,10 @@ export function Browse() {
             } else {
                 setFilteredPlaylists(playlists);
                 setFilteredSongs(songs);
+                setFilteredUsers(users)
             }
         }
-    }, [playlists, songs]);
+    }, [playlists, songs,users]);
 
 
 
@@ -222,15 +228,24 @@ export function Browse() {
             tokenize: true,
             matchAllTokens: false,
         };
+        const userOptions = {
+            keys: ['username'],
+            threshold: 0.4,
+            tokenize: true,
+            matchAllTokens: false,
+        };
 
         const playlistFuse = new Fuse(playlists, playlistOptions);
         const songFuse = new Fuse(songs, songOptions);
+        const userFuse = new Fuse(users, userOptions);
 
         const filteredPlaylists = playlistFuse.search(term).map(result => result.item);
         const filteredSongs = songFuse.search(term).map(result => result.item);
+        const filteredUsers = userFuse.search(term).map(result => result.item);
 
         setFilteredPlaylists(filteredPlaylists);
         setFilteredSongs(filteredSongs);
+        setFilteredUsers(filteredUsers);
     };
 
     const cancelSearch = () => {
@@ -267,6 +282,15 @@ export function Browse() {
                         <hr />
                     </div>
                     <SongContainer songs={filteredSongs} />
+                </div>
+            )}
+            {filteredUsers.length > 0 && (
+                <div>
+                    <div className="other-container">
+                        <h3 className="home-heading">Users</h3>
+                        <hr />
+                    </div>
+                    <UserHorizontalContainer users={filteredUsers} />
                 </div>
             )}
         </div>
