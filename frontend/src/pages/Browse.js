@@ -164,6 +164,7 @@ import { PlaylistContainerHorizontal } from "../components/PlaylistContainerHori
 import { SongContainer } from "../components/SongContainer";
 import { SearchBar } from "../components/SearchBar";
 import { useSearchParams } from 'react-router-dom';
+import Fuse from "fuse.js";
 
 export function Browse() {
     const [playlists, setPlaylists] = useState([]);
@@ -178,8 +179,8 @@ export function Browse() {
     useEffect( () => {
         const fetchData = async () => {
             try {
-                const playlistsData = await dataManager.getPlaylists();
-                const songsData = await dataManager.getSongs();
+                const playlistsData = await dataManager.getPlaylists().finally();
+                const songsData = await dataManager.getSongs().finally();
                 setPlaylists(playlistsData);
                 setSongs(songsData);
             } catch (error) {
@@ -200,8 +201,8 @@ export function Browse() {
                 setSearchTerm(term);
                 handleFuzzySearch(term);
             } else {
-                setFilteredPlaylists(playlistsData);
-                setFilteredSongs(songsData);
+                setFilteredPlaylists(playlists);
+                setFilteredSongs(songs);
             }
         }
     }, [playlists, songs]);
@@ -209,7 +210,7 @@ export function Browse() {
 
 
     const handleFuzzySearch = (term) => {
-        console.log(term);
+       /* console.log(term);
         console.log(playlists)
         const filteredPlaylists = playlists.filter(playlist => {
             const nameMatch = playlist.name.toLowerCase().includes(term.toLowerCase());
@@ -224,6 +225,27 @@ export function Browse() {
             song.title.toLowerCase().includes(term.toLowerCase())
         );
 
+        setFilteredPlaylists(filteredPlaylists);
+        setFilteredSongs(filteredSongs);*/
+        // Define fuse options for playlists and songs
+        const playlistOptions = {
+            keys: ['name', 'hashtags', 'genre'], // Fields to search in
+            threshold: 0.3 // Adjust for more or less strict matching
+        };
+        const songOptions = {
+            keys: ['title'],
+            threshold: 0.3
+        };
+
+        // Create a Fuse instance for playlists and songs
+        const playlistFuse = new Fuse(playlists, playlistOptions);
+        const songFuse = new Fuse(songs, songOptions);
+
+        // Perform fuzzy search
+        const filteredPlaylists = playlistFuse.search(term).map(result => result.item);
+        const filteredSongs = songFuse.search(term).map(result => result.item);
+
+        // Update the filtered results
         setFilteredPlaylists(filteredPlaylists);
         setFilteredSongs(filteredSongs);
     };
