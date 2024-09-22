@@ -26,12 +26,10 @@ export function AddSongToPlaylist() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        //fetch the playlists the user created
         const fetchUser = async () => {
             try {
                 const fetchedUser = await dataManager.getUser(JSON.parse(sessionStorage.getItem('userData'))._id);
 
-                // Ensure user data is available before fetching playlists
                 if (fetchedUser) {
                     const {playlists_created} = await fetchUserPlaylists(fetchedUser);
                     setPlaylists(playlists_created);
@@ -48,8 +46,6 @@ export function AddSongToPlaylist() {
     async function fetchUserPlaylists(user) {
         try {
             const playlists_created = await dataManager.getPlaylistsByIds(user.playlists_created);
-
-            console.log('Created Playlists:', playlists_created);
 
             playlists_created.map(p => p.user = user);
 

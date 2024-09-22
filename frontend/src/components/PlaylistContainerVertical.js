@@ -53,18 +53,12 @@ import dataManager from "../utils/dataManager";
      */
     handleAddSong = async () => {
         try {
-            // Create an array of promises to update each playlist
             const updatePromises = this.state.selectedPlaylists.map(async (playlist) => {
-                playlist.songs.push(this.songId); // Add the song to the playlist's songs array
-                console.log(`Adding song to playlist: ${playlist.name}`, playlist.songs);
-                // Update the playlist with the new songs array
+                playlist.songs.push(this.songId);
                 return dataManager.updatePlaylistSongs(playlist.id, playlist.songs);
             });
 
-            // Wait for all update promises to resolve
             const updatedPlaylists = await Promise.all(updatePromises);
-
-            console.log('All playlists updated:', updatedPlaylists);
 
             window.location.href = '/home';
         } catch (error) {
@@ -72,12 +66,34 @@ import dataManager from "../utils/dataManager";
         }
     }
 
+    createNewPlaylist = async () => {
+        const date = new Date();
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
 
-
+        const currentDate =  `${day}/${month}/${year}`;
+        const formData = {
+            userId: JSON.parse(sessionStorage.getItem('userData'))._id,
+            coverImage: 'https://opensource.com/sites/default/files/lead-images/rust_programming_crab_sea.png',
+            date_created:currentDate,
+            genre: '66e377a9b13b146f637c19e8',
+            name: 'new Playlist',
+            description: 'newly created Playlist',
+            hashtags: [],
+            songs:[`${this.songId}`]
+        }
+        try {
+            const response = await dataManager.addPlaylist(formData.userId,formData);
+            window.location.href = '/home';
+        } catch (error) {
+            console.error("Error adding playlist:", error);
+        }
+    }
 
     render() {
-        // Ensure that the provided playlists prop is an array
-        if (!Array.isArray(this.playlists)) {
+
+        if (!Array.isArray(this.props.playlists)) {
             return <div>Error: Playlists data is not an array.</div>;
         }
 
@@ -85,7 +101,7 @@ import dataManager from "../utils/dataManager";
             <div className="container-fluid"
                  style={{display: "flex",flexDirection:"column", gap: "30px", justifyContent: "center", alignItems: "center"}}>
                 <Scrollbar style={{width: "25vw", height: "40vh", gap: "50px"}}>
-                    {this.playlists.map((playlist, index) => (
+                    {this.props.playlists.map((playlist, index) => (
                         <PlaylistPreview
                             key={index}
                             playlist={playlist}
@@ -93,9 +109,17 @@ import dataManager from "../utils/dataManager";
                         />
                     ))}
                 </Scrollbar>
-                <button onClick={this.handleAddSong} className="btn back-btn" style={{backgroundColor:"#ff70a6",color:"white"}}>
-                    Add Song
-                </button>
+                <div>
+                    <button onClick={this.handleAddSong} className="btn back-btn"
+                            style={{backgroundColor: "#ff70a6", color: "white"}}>
+                        Add Song
+                    </button>
+                    <button onClick={this.createNewPlaylist} className="btn back-btn"
+                            style={{backgroundColor: "#70d6ff", color: "white"}}>
+                        Create new Playlist
+                    </button>
+                </div>
+
             </div>
         );
     }

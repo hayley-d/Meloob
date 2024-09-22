@@ -13,7 +13,7 @@ export function AddPlaylistForm() {
         return `${day}/${month}/${year}`;
     };
 
-    const [formData, setFormData] = useState({ userId: JSON.parse(sessionStorage.getItem('userData'))._id,coverImage: '',date_created:getCurrentDate(), genre: '66e377a9b13b146f637c19e8',name: 'new Playlist', description: '', hashtags: [], songs:[] });
+    const [formData, setFormData] = useState({ userId: JSON.parse(sessionStorage.getItem('userData'))._id,coverImage: 'https://opensource.com/sites/default/files/lead-images/rust_programming_crab_sea.png',date_created:getCurrentDate(), genre: '66e377a9b13b146f637c19e8',name: 'new Playlist', description: '', hashtags: [], songs:[] });
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
     const [coverImageUrl, setCoverImageUrl] = useState('https://octodex.github.com/images/vinyltocat.png');
@@ -80,7 +80,7 @@ export function AddPlaylistForm() {
                 ...prevErrors,
                 coverImage: 'Invalid URL format',
             }));
-            setCoverImageUrl('https://octodex.github.com/images/vinyltocat.png');
+            setCoverImageUrl('https://opensource.com/sites/default/files/lead-images/rust_programming_crab_sea.png');
             return;
         } else {
             setErrors((prevErrors) => ({ ...prevErrors, coverImage: null }));

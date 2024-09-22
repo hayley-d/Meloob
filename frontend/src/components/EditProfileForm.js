@@ -41,7 +41,6 @@ export function EditProfileForm() {
     const handleProfileImageChange = (e) => {
         const option = e.target.value;
         const profileImageUrl = getProfileImage(option);
-        console.log("Image changed:", profileImageUrl);
         setFormData({ ...formData, profile_picture: profileImageUrl });
         setProfileImageUrl(profileImageUrl);
     };
@@ -49,7 +48,6 @@ export function EditProfileForm() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate the form
         const validationErrors = Validator.validateProfileUpdate(formData);
         console.log(formData);
         if (Object.keys(validationErrors).length > 0) {
@@ -58,7 +56,6 @@ export function EditProfileForm() {
         }
 
         try {
-
             await dataManager.updateUserProfile(id, formData);
             navigate(`/profile/${id}`);
         } catch (error) {
@@ -78,8 +75,11 @@ export function EditProfileForm() {
         else if(option == 3){
             return "https://rustacean.net/assets/rustacean-flat-gesture.png";
         }
+        else if(option == 4){
+            return "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F63aab9a7-3856-46dd-9a1a-97a3cfc2685b_1024x1024.png";
+        }
        else {
-           return "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F63aab9a7-3856-46dd-9a1a-97a3cfc2685b_1024x1024.png";
+           return "https://m.media-amazon.com/images/I/61X8OhzqytL.jpg";
         }
     };
 
@@ -118,6 +118,7 @@ export function EditProfileForm() {
                         <option value="2">Gopher</option>
                         <option value="3">Crab</option>
                         <option value="4">Croc</option>
+                        <option value="5">Unicorn</option>
                     </select>
                     {errors.profile_picture && <p style={{ color: 'red' }}>{errors.profile_picture}</p>}
                 </div>
