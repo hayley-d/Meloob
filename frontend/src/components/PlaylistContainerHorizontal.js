@@ -50,7 +50,7 @@ export class PlaylistContainerHorizontal extends Component {
                             }}>
 
                             <div className="content-box" style={{height:"fit-content"}}>
-                                {this.playlists.map((playlist, index) => (
+                                {this.props.playlists.map((playlist, index) => (
                                     <PlaylistPreviewLarge key={index} playlist={playlist}/>
                                 ))}
                             </div>

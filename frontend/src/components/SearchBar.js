@@ -15,9 +15,7 @@ export class SearchBar extends React.Component {
     }
 
     handleSearch () {
-        const { onSearch } = this.props;
-        const { input } = this.state;
-        onSearch(input);
+        this.props.onSearch(this.state.input);
     }
 
     cancelSearch (){
@@ -25,8 +23,6 @@ export class SearchBar extends React.Component {
         this.setState({ input: '' });
         onCancel();
     }
-
-
 
     render() {
         return (

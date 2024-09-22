@@ -27,15 +27,18 @@ export class Browse extends React.Component{
      handleFuzzySearch (term) {
          const { playlists, songs } = this.state;
 
-         console.log('Search term:', term);
+         /*console.log('Search term:', term);
          console.log('Playlists:', playlists);
-         console.log('Songs:', songs);
+         console.log('Songs:', songs);*/
 
-         const playlistFuse = new Fuse(playlists, {keys: ['name'], includeScore: true });
-         const songFuse = new Fuse(songs, { keys: ['title'], includeScore: true });
+         const filteredPlaylists = playlists.filter(playlist =>
+             playlist.name.toLowerCase().includes(term.toLowerCase())
+         );
+         console.log(filteredPlaylists);
 
-         const filteredPlaylists = playlistFuse.search(term).map(result => result.item);
-         const filteredSongs = songFuse.search(term).map(result => result.item);
+         const filteredSongs = songs.filter(song =>
+             song.title.toLowerCase().includes(term.toLowerCase())
+         );
 
          this.setState({
              searchTerm: term,
@@ -108,16 +111,30 @@ export class Browse extends React.Component{
             <div>
                 <NavBar location="Browse"/>
                 <SearchBar onSearch={this.handleFuzzySearch} onCancel={this.cancelSearch} />
-                <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
-                    <h3 className="home-heading">Playlists</h3>
-                    <hr/>
-                </div>
-                <PlaylistContainerHorizontal playlists={this.state.filteredPlaylists}/>
-                <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
-                    <h3 className="home-heading" style={{color: "#ff9770"}}>Songs</h3>
-                    <hr/>
-                </div>
-                <SongContainer songs={this.state.filteredSongs}/>
+                {
+                    this.state.filteredPlaylists.length > 0 ? (
+                        <div>
+                            <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
+                                <h3 className="home-heading">Playlists</h3>
+                                <hr/>
+                            </div>
+                            <PlaylistContainerHorizontal playlists={this.state.filteredPlaylists}/>
+                        </div>
+                    ) : null
+                }
+
+                {
+                    this.state.filteredSongs.length > 0 ? (
+                        <div>
+                            <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
+                                <h3 className="home-heading" style={{color: "#ff9770"}}>Songs</h3>
+                                <hr/>
+                            </div>
+                            <SongContainer songs={this.state.filteredSongs}/>
+                        </div>
+                    ) : null
+                }
+
             </div>
         );
     }

@@ -22,7 +22,6 @@ export class SongContainer extends Component {
                 behavior: "smooth",
             });
 
-            // Update the scroll position state
             this.setState({
                 scrollPosition: this.containerRef.current.scrollLeft + scrollAmount,
             });
@@ -42,7 +41,7 @@ export class SongContainer extends Component {
                             }}>
 
                             <div className="content-box">
-                                {this.songs.map((song, index) => (
+                                {this.props.songs.map((song, index) => (
                                     <Song key={index} song={song}/>
                                 ))}
                             </div>
