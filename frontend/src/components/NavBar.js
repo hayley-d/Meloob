@@ -41,6 +41,8 @@ import dataManager from "../utils/dataManager";
          const { location } = this.props;
          const { user, isLoading } = this.state
 
+         const isAdmin = JSON.parse(sessionStorage.getItem('isAdmin'));
+
       return(
           <nav className="navigation navbar container-fluid ">
               <div className="container-fluid navdiv">
@@ -54,6 +56,7 @@ import dataManager from "../utils/dataManager";
                       <>
                           <NavLink className="navlink" to='/home'>Home</NavLink>
                           <NavLink className="navlink" to='/browse'>Browse</NavLink>
+                          {isAdmin ? (<NavLink className="navlink" to='/admin'>Admin</NavLink>) : null}
                           {user ? (
                               <NavLink className="navlink" to={`/profile/${user.id}`}>
                                   <div id="profileImg"  style={{ backgroundImage: `url(${this.state.user.profile_picture})` }}></div>

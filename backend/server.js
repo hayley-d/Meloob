@@ -51,6 +51,9 @@ app.get('/browse', (req, res) => {
 app.get('/add/*', (req, res) => {
   res.sendFile(path.resolve("./frontend/public/index.html"));
 });
+app.get('/admin', (req, res) => {
+  res.sendFile(path.resolve("./frontend/public/index.html"));
+});
 
 
 const startServer = async () => {

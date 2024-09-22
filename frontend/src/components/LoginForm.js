@@ -33,8 +33,13 @@ export function LoginForm() {
                 if (response.ok) {
                     const data = await response.json();
                     const user = data.user;
+
+                    const adminResponse = await fetch(`http://localhost:3001/api/admins/${user.id}`);
+                    const isAdmin = adminResponse.ok;
+
                     sessionStorage.setItem('user', JSON.stringify(email));
                     sessionStorage.setItem('userData', JSON.stringify(user));
+                    sessionStorage.setItem('isAdmin', JSON.stringify(isAdmin));
                     navigate("/home");
                 } else {
                     const errorData = await response.json();

@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('./models/User');
 const Genre = require('./models/Genre');
+const Admin = require('./models/AdminUser');
 const Playlist = require('./models/Playlist');
 const Comment = require('./models/Comment');
 const Song = require('./models/Song');
@@ -305,7 +306,8 @@ userRoutes.put('/user/:id', async (req, res) => {
  *     "following": ["64e3f1bc9f12a61d2c5a4c59"],
  *     "playlists_created": ["64e3f1bc9f12a61d2c5a4c5a"],
  *     "playlists_saved": ["64e3f1bc9f12a61d2c5a4c5b"],
- *     "description": "Music lover"
+ *     "description": "Music lover",
+ *     "isAdmin": false // Indicates if the user is an admin
  *   }
  * }
  *
@@ -337,6 +339,7 @@ userRoutes.post('/login', async (req, res) => {
         }
 
         req.session.user = user;
+
         res.status(200).json({ message: 'Login successful' ,user:user});
 
     } catch (error) {
@@ -1553,6 +1556,49 @@ userRoutes.post('/comments/:playlistId', async (req, res) => {
     } catch (error) {
         console.error('Error adding comment:', error);
         res.status(500).json({ message: 'Server error' });
+    }
+});
+
+/**
+ * Checks if a user is an admin.
+ *
+ * @route GET /api/admins/:userId
+ * @param {string} userId - The ID of the user to check.
+ * @returns {Object} - An object indicating whether the user is an admin.
+ * @throws {Error} - Returns a 404 status code if the user is not found, or a 500 status code for server errors.
+ *
+ * @example
+ * // Successful response example (user is admin):
+ * {
+ *   "isAdmin": true
+ * }
+ *
+ * @example
+ * // Successful response example (user is not admin):
+ * {
+ *   "isAdmin": false
+ * }
+ *
+ * @example
+ * // Error response example:
+ * {
+ *   "error": "Failed to check admin status"
+ * }
+ */
+userRoutes.get('/admins/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const admin = await Admin.findOne({ userId }).exec();
+
+        if (admin) {
+            res.status(200).json({ isAdmin: true });
+        } else {
+            res.status(200).json({ isAdmin: false });
+        }
+    } catch (error) {
+        console.error("Error checking admin status:", error);
+        res.status(500).json({ error: 'Failed to check admin status' });
     }
 });
 

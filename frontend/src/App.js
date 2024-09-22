@@ -12,6 +12,7 @@ import {AddSong} from "./pages/AddSong";
 import {EditPlaylist} from "./pages/EditPlaylist";
 import {AddPlaylist} from "./pages/AddPlaylist";
 import {AddSongToPlaylist} from "./pages/AddSongToPlaylist";
+import {Admin} from "./pages/Admin";
 
 const router = createBrowserRouter(
             
@@ -27,7 +28,7 @@ const router = createBrowserRouter(
         {path:'/addSong/:songId',element:<AddSongToPlaylist/>},
         {path:'/add/playlist',element:<AddPlaylist/>},
         {path:'/add/song',element:<AddSong/>},
-
+        {path:'/admin',element:<Admin/>},
     ]
 );
 
