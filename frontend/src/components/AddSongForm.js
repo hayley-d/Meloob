@@ -4,10 +4,11 @@ import dataManager from '../utils/dataManager';
 import { Validator } from "../utils/Validator";
 
 export function AddSongForm() {
-    const [formData, setFormData] = useState({ title: '',artist:'', link: '',genre: '' });
+    const [formData, setFormData] = useState({ title: '',artist:'', link: '',genre: '66e377a9b13b146f637c19e8' });
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
     const [linkUrl, setLinkUrl] = useState({});
+    const [selectedGenreOption, setSelectedGenreOption] = useState('1');
 
     /**
      * Handle changes to input fields.
@@ -27,6 +28,9 @@ export function AddSongForm() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = Validator.validateAddSong(formData);
+        if (!isValidSpotifyLink(formData.link)) {
+            validationErrors.link = "Please enter a valid Spotify link.";
+        }
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
@@ -77,6 +81,53 @@ export function AddSongForm() {
         }
     };
 
+    /**
+     * Validate that the provided link is a valid Spotify URL.
+     * @param {string} url - The URL to validate.
+     * @returns {boolean} - True if the URL is valid, false otherwise.
+     */
+    const isValidSpotifyLink = (url) => {
+        const spotifyUrlRegex = /^(https:\/\/open\.spotify\.com\/(track|album)\/[a-zA-Z0-9]+)(\?.*)?$/;
+        return spotifyUrlRegex.test(url);
+    };
+
+    const handelGenreChange = (e) => {
+        const option = e.target.value;
+        const genreId = getGenreId(option);
+        setSelectedGenreOption(option);
+        setFormData((prevData) => ({
+            ...prevData,
+            genre: genreId,
+        }));
+    };
+
+    const getGenreId = (option)  => {
+        if(option == 1){
+            return "66e377a9b13b146f637c19e8";//Pop
+        }
+        else if (option == 2){
+            return "66e377a9b13b146f637c19e9";//Jazz
+        }
+        else if(option == 3){
+            return "66e377a9b13b146f637c19e7";//Rock
+        }
+        else if (option == 4){
+            return "66e377a9b13b146f637c19eb";//Rap
+        }
+        else if(option == 5){
+            return "66e377a9b13b146f637c19ec";//Folk
+        }
+        else if (option == 6){
+            return "66e377a9b13b146f637c19ed";//Lo-Fi
+        }
+        else if(option == 7){
+            return "66e377a9b13b146f637c19ee";//Indie
+        }
+        else {
+            return "66e377a9b13b146f637c19ea";//Classic
+        }
+    };
+
 
     return (
         <div className="container">
@@ -89,9 +140,24 @@ export function AddSongForm() {
                     {errors.title && <p style={{color: 'red'}}>{errors.title}</p>}
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="genre" className="form-label">Genre</label>
+                    {/*<label htmlFor="genre" className="form-label">Genre</label>
                     <input type="text" className="form-control" id="genre"
-                           value={formData.genre} onChange={handleInputChange} name="genre"/>
+                           value={formData.genre} onChange={handleInputChange} name="genre"/>*/}
+                    <label htmlFor="profile-image" className="form-label">Genre</label>
+                    <select className="form-select" aria-label="Default select example"
+                            id="genre"
+                            name="genre"
+                            value={selectedGenreOption}
+                            onChange={handelGenreChange}>
+                        <option value="1">Pop</option>
+                        <option value="2">Jazz</option>
+                        <option value="3">Rock</option>
+                        <option value="4">Rap</option>
+                        <option value="5">Folk</option>
+                        <option value="6">Lo-Fi</option>
+                        <option value="7">Indie</option>
+                        <option value="8">Classic</option>
+                    </select>
                     {errors.genre && <p style={{color: 'red'}}>{errors.genre}</p>}
                 </div>
                 <div className="mb-3">
