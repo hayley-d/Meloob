@@ -54,6 +54,13 @@ import dataManager from "../utils/dataManager";
     handleAddSong = async () => {
         try {
             const updatePromises = this.state.selectedPlaylists.map(async (playlist) => {
+                const isSongInPlaylist = playlist.songs.includes(this.songId);
+                if (isSongInPlaylist) {
+                    const confirmAdd = window.confirm(`The song is already in ${playlist.name}. Do you want to add it again?`);
+                    if (!confirmAdd) {
+                        window.location.href = '/home';
+                    }
+                }
                 playlist.songs.push(this.songId);
                 return dataManager.updatePlaylistSongs(playlist.id, playlist.songs);
             });
