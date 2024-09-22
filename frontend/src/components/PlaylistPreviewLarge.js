@@ -8,10 +8,21 @@ export function PlaylistPreviewLarge({playlist}) {
     const navigate = useNavigate();
     const user = playlist.user;
 
-    // Create a string of hashtags
     const hashtags = playlist.hashtags.map((tag, index) => (
-        <span key={index} className='hashtag'>{`#${tag} `}</span>
+        <span
+            key={index}
+            className='hashtag'
+            style={{ cursor: "pointer", color: "#ff70a6" }}
+            onClick={() => handleHashtagClick(tag)}
+        >
+            {`#${tag} `}
+        </span>
     ));
+
+    // Create a string of hashtags
+    /*const hashtags = playlist.hashtags.map((tag, index) => (
+        <span key={index} className='hashtag'>{`#${tag} `}</span>
+    ));*/
 
     const goToUserProfile = () => {
         console.log("Go to user");
@@ -20,6 +31,10 @@ export function PlaylistPreviewLarge({playlist}) {
 
     const goToPlaylist = () => {
         navigate(`/playlist/${playlist.id}`);
+    }
+
+    const handleHashtagClick = (tag) => {
+        navigate(`/browse?search=${tag}`);
     }
 
     return (
@@ -38,10 +53,10 @@ export function PlaylistPreviewLarge({playlist}) {
                 <div className="playlist-genre">{playlist.genre}</div>
             </div>
 
-            <div onClick={goToPlaylist} className="card-body playlist-card-body">
-                <img className=" playlist-card-picture" style={{borderRadius: "20px"}} src={playlist.coverImage}
+            <div  className="card-body playlist-card-body">
+                <img onClick={goToPlaylist} className=" playlist-card-picture" style={{borderRadius: "20px"}} src={playlist.coverImage}
                      alt={playlist.name}/>
-                <h5 className="card-title" style={{
+                <h5  onClick={goToPlaylist} className="card-title" style={{
                     color: "#28282f",
                     fontSize: "25px",
                     marginTop: "18px",

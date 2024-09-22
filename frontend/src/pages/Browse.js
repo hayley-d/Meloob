@@ -6,7 +6,7 @@ import {SongContainer} from "../components/SongContainer";
 import {SearchBar} from "../components/SearchBar";
 import Fuse from 'fuse.js';
 
-export class Browse extends React.Component{
+export class Browse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,30 +24,31 @@ export class Browse extends React.Component{
         this.cancelSearch = this.cancelSearch.bind(this);
     }
 
-     handleFuzzySearch (term) {
-         const { playlists, songs } = this.state;
+    handleFuzzySearch(term) {
+        const {playlists, songs} = this.state;
 
-         /*console.log('Search term:', term);
-         console.log('Playlists:', playlists);
-         console.log('Songs:', songs);*/
+        const filteredPlaylists = playlists.filter(playlist => {
+            const nameMatch = playlist.name.toLowerCase().includes(term.toLowerCase());
+            const hashtagsMatch = playlist.hashtags.some(hashtag =>
+                hashtag.toLowerCase().includes(term.toLowerCase())
+            );
+            const genreMatch = playlist.genre.toLowerCase().includes(term.toLowerCase());
+            return nameMatch || hashtagsMatch || genreMatch;
+        });
 
-         const filteredPlaylists = playlists.filter(playlist =>
-             playlist.name.toLowerCase().includes(term.toLowerCase())
-         );
-         console.log(filteredPlaylists);
 
-         const filteredSongs = songs.filter(song =>
-             song.title.toLowerCase().includes(term.toLowerCase())
-         );
+        const filteredSongs = songs.filter(song =>
+            song.title.toLowerCase().includes(term.toLowerCase())
+        );
 
-         this.setState({
-             searchTerm: term,
-             filteredPlaylists,
-             filteredSongs
-         });
+        this.setState({
+            searchTerm: term,
+            filteredPlaylists,
+            filteredSongs
+        });
     };
 
-    cancelSearch(){
+    cancelSearch() {
         this.setState({
             searchTerm: '',
             filteredPlaylists: this.state.playlists,
@@ -95,9 +96,8 @@ export class Browse extends React.Component{
     }
 
 
-
     render() {
-        const { isLoading, error} = this.state;
+        const {isLoading, error} = this.state;
 
         if (isLoading) {
             return <div>Loading...</div>;
@@ -110,7 +110,7 @@ export class Browse extends React.Component{
         return (
             <div>
                 <NavBar location="Browse"/>
-                <SearchBar onSearch={this.handleFuzzySearch} onCancel={this.cancelSearch} />
+                <SearchBar onSearch={this.handleFuzzySearch} onCancel={this.cancelSearch}/>
                 {
                     this.state.filteredPlaylists.length > 0 ? (
                         <div>

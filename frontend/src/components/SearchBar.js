@@ -15,7 +15,8 @@ export class SearchBar extends React.Component {
     }
 
     handleSearch () {
-        this.props.onSearch(this.state.input);
+        const sanitizedInput = this.state.input.replace(/#/g, '').trim();
+        this.props.onSearch(sanitizedInput);
     }
 
     cancelSearch (){
