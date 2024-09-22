@@ -82,71 +82,29 @@ export function SignupForm() {
             <h3 className="form-heading">Join Now</h3>
             <form onSubmit={handleSubmit}>
                 <div className={`input-group has-validation ${errors.username ? 'is-invalid' : ''}`}>
-                    <div className="form-floating">
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="floatingInputGroup1"
-                            name="username"
-                            placeholder="Username"
-                            value={username}
-                            onChange={handleChange}
-                            required
-                        />
-                        <label htmlFor="floatingInputGroup1">Username</label>
-                    </div>
-                    {errors.username && <div className="invalid-feedback">{errors.username}</div>}
+                    <label htmlFor="username" className="label">Username</label>
+                    <input type="text" className="input" id="username" name="username" placeholder="Username" value={username} onChange={handleChange} required/>
+                    {errors.username && <div className="error-message">{errors.username}</div>}
                 </div>
                 <div className={`input-group has-validation ${errors.email ? 'is-invalid' : ''}`}>
-                    <div className="form-floating">
-                        <input
-                            type="email"
-                            className="form-control"
-                            id="floatingInputGroup2"
-                            name="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={handleChange}
-                            required
-                        />
-                        <label htmlFor="floatingInputGroup2">Email Address</label>
-                    </div>
-                    {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                    <label htmlFor="email" className="label">Email Address</label>
+                    <input type="email" className="input" id="email" name="email" placeholder="Email" value={email} onChange={handleChange} required/>
+                    {errors.email && <div className="error-message">{errors.email}</div>}
                 </div>
                 <div className={`input-group has-validation ${errors.password ? 'is-invalid' : ''}`}>
-                    <div className="form-floating">
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="floatingInputGroup3"
-                            name="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={handleChange}
-                            required
-                        />
-                        <label htmlFor="floatingInputGroup3">Password</label>
-                    </div>
-                    {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                    <label htmlFor="password" className="label">Password</label>
+                    <input type="password" className="input" id="password" name="password" placeholder="Password" value={password} onChange={handleChange} required/>
+                    {errors.password && <div className="error-message">{errors.password}</div>}
                 </div>
                 <div className={`input-group has-validation ${errors.confirmPassword ? 'is-invalid' : ''}`}>
-                    <div className="form-floating">
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="floatingInputGroup4"
-                            name="confirmPassword"
-                            placeholder="Confirm Password"
-                            value={confirmPassword}
-                            onChange={handleChange}
-                            required
-                        />
-                        <label htmlFor="floatingInputGroup4">Confirm Password</label>
-                    </div>
-                    {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
+                    <label htmlFor="floatingInputGroup4" className="label">Confirm Password</label>
+                    <input type="password" className="input" id="floatingInputGroup4" name="confirmPassword" placeholder="Confirm Password" value={confirmPassword} onChange={handleChange} required/>
+                    {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
+                </div>
+                <div className="button-container">
+                    <button type="submit" className="button">Submit</button>
                 </div>
 
-                <button type="submit" className="form-floating btn btn-primary">Submit</button>
             </form>
         </div>
     );

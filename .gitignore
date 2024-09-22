@@ -6,6 +6,8 @@ build/
 # Environment variables
 .env
 
+.css
+
 # Log files
 *.log
 

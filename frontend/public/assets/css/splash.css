@@ -65,12 +65,12 @@ form{
     display: block!important;
 }
 
-form > button {
+/*form > button {
     font-family: "Montserrat", sans-serif;!important;
     color: #fff!important;
     background-color: #ff70a6!important;
     border:none!important;
-}
+}*/
 
 .form-floating{
     margin-top: 10px;

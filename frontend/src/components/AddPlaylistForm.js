@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import dataManager from '../utils/dataManager';
 import { Validator } from "../utils/Validator";
+
 
 export function AddPlaylistForm() {
     const getCurrentDate = () => {
@@ -16,7 +17,7 @@ export function AddPlaylistForm() {
     const [formData, setFormData] = useState({ userId: JSON.parse(sessionStorage.getItem('userData'))._id,coverImage: 'https://opensource.com/sites/default/files/lead-images/rust_programming_crab_sea.png',date_created:getCurrentDate(), genre: '66e377a9b13b146f637c19e8',name: 'new Playlist', description: '', hashtags: [], songs:[] });
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
-    const [coverImageUrl, setCoverImageUrl] = useState('https://octodex.github.com/images/vinyltocat.png');
+    const [coverImageUrl, setCoverImageUrl] = useState('https://opensource.com/sites/default/files/lead-images/rust_programming_crab_sea.png');
     const [selectedGenreOption, setSelectedGenreOption] = useState('1');
 
     useEffect(() => {
@@ -192,25 +193,18 @@ export function AddPlaylistForm() {
         <div className="container">
             <h2>Add Playlist</h2>
             <form onSubmit={handleFormSubmit}>
-                <div className="form-profile-image" style={{
-                    backgroundImage: `url(${coverImageUrl})`,
-                    borderRadius: "20px",
-                    backgroundSize: "cover"
-                }}></div>
-
-                <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Name</label>
-                    <input type="text" className="form-control" id="name"
-                           value={formData.name} onChange={handleInputChange} name="name"/>
-                    {errors.name && <p style={{color: 'red'}}>{errors.name}</p>}
+                <div className="image-container">
+                    <div className="add-playlist-image" style={{backgroundImage: `url(${coverImageUrl})`}}></div>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="profile-image" className="form-label">Genre</label>
-                    <select className="form-select" aria-label="Default select example"
-                            id="genre"
-                            name="genre"
-                            value={selectedGenreOption}
-                            onChange={handelGenreChange}>
+
+                <div className="input-group">
+                    <label htmlFor="name" className="label">Name</label>
+                    <input type="text" className={`input ${errors.name ? "input-error" : ""}`} id="name" value={formData.name} onChange={handleInputChange} name="name"/>
+                    {errors.name && <p className="error-message">{errors.name}</p>}
+                </div>
+                <div className="input-group">
+                    <label htmlFor="profile-image" className="label">Genre</label>
+                    <select className="select" id="genre" name="genre" value={selectedGenreOption} onChange={handelGenreChange}>
                         <option value="1">Pop</option>
                         <option value="2">Jazz</option>
                         <option value="3">Rock</option>
@@ -220,29 +214,29 @@ export function AddPlaylistForm() {
                         <option value="7">Indie</option>
                         <option value="8">Classic</option>
                     </select>
-                    {errors.genre && <p style={{color: 'red'}}>{errors.genre}</p>}
+                    {errors.genre && <p className="error-message">{errors.genre}</p>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label">Description</label>
-                    <textarea className="form-control" id="description" name="description" rows="3"
-                              value={formData.description}
-                              onChange={handleInputChange}></textarea>
-                    {errors.description && <p style={{color: 'red'}}>{errors.description}</p>}
+                <div className="input-group">
+                    <label htmlFor="description" className="label">Description</label>
+                    <textarea className="textarea" id="description" name="description" rows="3" value={formData.description} onChange={handleInputChange}></textarea>
+                    {errors.description && <p className="error-message">{errors.description}</p>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="hashtags" className="form-label">Hashtags (space-separated)</label>
-                    <input type="text" className="form-control" id="hashtags" name="hashtags"
+                <div className="input-group">
+                    <label htmlFor="hashtags" className="label">Hashtags (space-separated)</label>
+                    <input type="text" className={`input ${errors.hashtags ? "input-error" : ""}`} id="hashtags" name="hashtags"
                            value={formData.hashtags.join(' ')} onChange={handleHashtagsChange}/>
                     {errors.hashtags && <p style={{color: 'red'}}>{errors.hashtags}</p>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="coverImage" className="form-label">Cover Image URL</label>
-                    <input type="text" className="form-control" id="coverImage" name="coverImage"
-                           value={formData.coverImage} onChange={handelImageChange} onKeyDown={handleKeyDown}/>
-                    {errors.coverImage && <p style={{color: 'red'}}>{errors.coverImage}</p>}
+                <div className="input-group">
+                    <label htmlFor="coverImage" className="label">Cover Image URL</label>
+                    <input type="text" className={`input ${errors.coverImage ? "input-error" : ""}`} id="coverImage" name="coverImage" value={formData.coverImage} onChange={handelImageChange} onKeyDown={handleKeyDown}/>
+                    {errors.coverImage && <p className="error-message">{errors.coverImage}</p>}
+                </div>
+                <div className="button-container">
+                    <button type="submit" className="button">Create Playlist</button>
                 </div>
 
-                <button type="submit" className="btn">Create Playlist</button>
+
             </form>
         </div>
     );

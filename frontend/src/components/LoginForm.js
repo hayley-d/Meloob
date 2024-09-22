@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Validator } from "../utils/Validator.js";
-import dataManager from "../utils/dataManager";
+import '../../public/assets/css/FormStyles.css';
+
 
 export function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate(); // Use navigate for redirection
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -17,12 +18,9 @@ export function LoginForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Form validation.....");
         const validationErrors = Validator.validateLogin({ email, password });
 
         if (Object.keys(validationErrors).length === 0) {
-            console.log('Form submitted successfully');
-
             try {
                 const response = await fetch('http://localhost:3001/api/login', {
                     method: 'POST',
@@ -37,9 +35,7 @@ export function LoginForm() {
                     const user = data.user;
                     sessionStorage.setItem('user', JSON.stringify(email));
                     sessionStorage.setItem('userData', JSON.stringify(user));
-                    //console.log('Stored user:', JSON.parse(sessionStorage.getItem('userData')));
-                    console.log('Login successful');
-                    navigate("/home"); // Redirect to /home
+                    navigate("/home");
                 } else {
                     const errorData = await response.json();
                     setErrors({ email: errorData.message });
@@ -48,139 +44,30 @@ export function LoginForm() {
                 setErrors({ email: 'Error logging in' });
             }
         } else {
-            console.log("login form errors found!", validationErrors);
             setErrors(validationErrors);
         }
     };
 
     return (
-        <div style={{ width: '50%' }}>
-            <h3 className="form-heading">Login</h3>
+        <div className="login-form-container">
+            <h3 className="heading" >Login</h3>
             <form onSubmit={handleSubmit}>
-                <div className={`input-group has-validation ${errors.email ? 'is-invalid' : ''}`}>
-                    <div className="form-floating">
-                        <input
-                            type="email"
-                            className="form-control"
-                            id="floatingInputGroup2"
-                            name="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={handleChange}
-                            required
-                        />
-                        <label htmlFor="floatingInputGroup2">Email Address</label>
-                    </div>
-                    {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                <div className={`input-group ${errors.email ? 'input-error' : ''}`}>
+                    <label className="label" htmlFor="email">Email Address</label>
+                    <input type="email" id="email" name="email" className="input" placeholder="Email" value={email} onChange={handleChange} required/>
+                    {errors.email && <div className="error-message">{errors.email}</div>}
                 </div>
-                <div className={`input-group has-validation ${errors.password ? 'is-invalid' : ''}`}>
-                    <div className="form-floating">
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="floatingInputGroup3"
-                            name="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={handleChange}
-                            required
-                        />
-                        <label htmlFor="floatingInputGroup3">Password</label>
-                    </div>
-                    {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                <div className={`input-group ${errors.password ? 'input-error' : ''}`}>
+                    <label className="label" htmlFor="password">Password</label>
+                    <input type="password" id="password" name="password" className="input" placeholder="Password" value={password} onChange={handleChange} required/>
+                    {errors.password && <div className="error-message">{errors.password}</div>}
                 </div>
-                <button type="submit" className="form-floating btn btn-primary">Submit</button>
+                <div className="button-container">
+                    <button type="submit" className="button">Submit</button>
+                </div>
+
             </form>
         </div>
     );
 }
 
-/*import React from 'react';
-import { Validator } from "../utils/Validator.js";
-import UserManager from "../utils/UserManager";
-import { redirect } from "react-router-dom";
-
-export class LoginForm extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: '',
-            errors: {}
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange  (e)  {
-        this.setState({ [e.target.name]: e.target.value });
-    }
-
-    handleSubmit (e)  {
-        e.preventDefault();
-        console.log("Form validation.....");
-        const { email, password } = this.state;
-        const errors = Validator.validateLogin({ email, password });
-
-        if (Object.keys(errors).length === 0) {
-            console.log('Form submitted successfully');
-            const user = UserManager.getUserByEmail(email);
-            if (user) {
-                console.log('User found:', user);
-                //redirect
-                return redirect("/home");
-            } else {
-                this.setState({ errors: { email: 'User not found' } });
-            }
-        } else {
-            console.log("login form errors found!",errors);
-            this.setState({ errors });
-        }
-    }
-
-      render(){
-          const { email, password, errors } = this.state;
-          return(
-              <div style={{ width: '50%'}}>
-                  <h3 className="form-heading">Login</h3>
-                  <form onSubmit={this.handleSubmit}>
-                      <div className={`input-group has-validation ${errors.email ? 'is-invalid' : ''}`}>
-                          <div className="form-floating">
-                              <input
-                                  type="email"
-                                  className="form-control"
-                                  id="floatingInputGroup2"
-                                  name="email"
-                                  placeholder="Email"
-                                  value={email}
-                                  onChange={this.handleChange}
-                                  required
-                              />
-                              <label htmlFor="floatingInputGroup2">Email Address</label>
-                          </div>
-                          {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-                      </div>
-                      <div className={`input-group has-validation ${errors.password ? 'is-invalid' : ''}`}>
-                          <div className="form-floating">
-                              <input
-                                  type="password"
-                                  className="form-control"
-                                  id="floatingInputGroup3"
-                                  name="password"
-                                  placeholder="Password"
-                                  value={password}
-                                  onChange={this.handleChange}
-                                  required
-                              />
-                              <label htmlFor="floatingInputGroup3">Password</label>
-                          </div>
-                          {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-                      </div>
-
-
-                      <button type="submit" className="form-floating btn btn-primary">Submit</button>
-                  </form>
-              </div>
-          );
-      }
-}*/
