@@ -280,15 +280,6 @@ svg:hover{
 
 }
 
-.form-profile-image{
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    width: 20vw;
-    height:20vw;
-    border-radius: 50%;
-}
-
 .back-btn :hover{
     background-color: #cccccc;!important;
     cursor: pointer;

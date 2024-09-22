@@ -91,40 +91,36 @@ export function EditProfileForm() {
         <div className="container">
             <h2>Edit Profile</h2>
             <form onSubmit={handleFormSubmit}>
-                <div className="form-profile-image" style={{backgroundImage:`url(${profileImageUrl})`}}>
-
+                <div className="image-container">
+                    <div className="form-profile-image" style={{backgroundImage:`url(${profileImageUrl})`}}>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="username" className="form-label">Username</label>
-                    <input type="text" className="form-control" id="username"
-                           value={formData.username} onChange={handleInputChange} name="username"/>
-                    {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label">Description</label>
-                    <textarea className="form-control" id="description" name="description" rows="3"
-                              value={formData.description}
-                              onChange={handleInputChange}></textarea>
-                    {errors.description && <p style={{ color: 'red' }}>{errors.description}</p>}
+                <div className="input-group">
+                    <label htmlFor="username" className="label">Username</label>
+                    <input type="text" className="input" id="username" value={formData.username} onChange={handleInputChange} name="username"/>
+                    {errors.username && <p className="error-message">{errors.username}</p>}
                 </div>
-                <div>
-                    <label htmlFor="profile-image" className="form-label">Profile Picture</label>
-                    <select className="form-select" aria-label="Default select example"
-                            id="profile-picture"
-                            name="profile_picture"
-                            value={selectedImageOption}
-                            onChange={handleProfileImageChange}>
+                <div className="input-group">
+                    <label htmlFor="description" className="label">Description</label>
+                    <textarea className="textarea" id="description" name="description" rows="3" value={formData.description} onChange={handleInputChange}></textarea>
+                    {errors.description && <p className="error-message">{errors.description}</p>}
+                </div>
+                <div className="input-group">
+                    <label htmlFor="profile-image" className="label">Profile Picture</label>
+                    <select className="select" id="profile-picture" name="profile_picture" value={selectedImageOption} onChange={handleProfileImageChange}>
                         <option value="1">Octocat</option>
                         <option value="2">Gopher</option>
                         <option value="3">Crab</option>
                         <option value="4">Croc</option>
                         <option value="5">Unicorn</option>
                     </select>
-                    {errors.profile_picture && <p style={{ color: 'red' }}>{errors.profile_picture}</p>}
+                    {errors.profile_picture && <p className="error-message">{errors.profile_picture}</p>}
                 </div>
 
+                <div className="button-container">
+                    <button type="submit" className="button">Save Changes</button>
+                </div>
 
-                <button type="submit" className="btn">Save Changes</button>
             </form>
         </div>
     );

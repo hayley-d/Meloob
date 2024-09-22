@@ -12,6 +12,24 @@
     min-width: fit-content;
 }
 
+.button-red{
+    font-family: "Montserrat", sans-serif;
+    border-radius: 10px;
+    background-color: darkred;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width:40%;
+    min-width: fit-content;
+}
+
+.button-red:hover {
+    background-color: #28282f;
+    color: white;
+}
 
 .button:hover {
     background-color: #ff70a6;
@@ -132,6 +150,7 @@
     width: 80%;
     height:20vw;
 }
+
 .image-container{
     display: flex;
     justify-content: center;
@@ -141,8 +160,21 @@
     padding:10px;
 }
 
+.form-profile-image{
+    border-radius: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 20vw;
+    height:20vw;
+}
+
 input, textarea, select{
     border-radius: 10px !important;
 }
 
-
+.double-button-container{
+    display: flex;
+    justify-content: center;
+    gap:50px;
+}

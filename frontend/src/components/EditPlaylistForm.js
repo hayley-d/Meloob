@@ -175,25 +175,17 @@ export function EditPlaylistForm() {
         <div className="container">
             <h2>Edit Playlist</h2>
             <form>
-                <div className="form-profile-image" style={{
-                    backgroundImage: `url(${coverImageUrl})`,
-                    borderRadius: "20px",
-                    backgroundSize: "cover"
-                }}></div>
-
-                <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Name</label>
-                    <input type="text" className="form-control" id="name"
-                           value={formData.name} onChange={handleInputChange} name="name"/>
-                    {errors.name && <p style={{color: 'red'}}>{errors.name}</p>}
+                <div className="image-container">
+                    <div className="form-profile-image" style={{backgroundImage: `url(${coverImageUrl})`,}}></div>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="genre" className="form-label">Genre</label>
-                    <select className="form-select" aria-label="Default select example"
-                            id="genre"
-                            name="genre"
-                            value={selectedGenreOption}
-                            onChange={handelGenreChange}>
+                <div className="input-group">
+                    <label htmlFor="name" className="label">Name</label>
+                    <input type="text" className="input" id="name" value={formData.name} onChange={handleInputChange} name="name"/>
+                    {errors.name && <p className="error-message">{errors.name}</p>}
+                </div>
+                <div className="input-group">
+                    <label htmlFor="genre" className="label">Genre</label>
+                    <select className="select" id="genre" name="genre" value={selectedGenreOption} onChange={handelGenreChange}>
                         <option value="1">Pop</option>
                         <option value="2">Jazz</option>
                         <option value="3">Rock</option>
@@ -203,34 +195,28 @@ export function EditPlaylistForm() {
                         <option value="7">Indie</option>
                         <option value="8">Classic</option>
                     </select>
-                    {errors.genre && <p style={{color: 'red'}}>{errors.genre}</p>}
+                    {errors.genre && <p className="error-message">{errors.genre}</p>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label">Description</label>
-                    <textarea className="form-control" id="description" name="description" rows="3"
-                              value={formData.description}
-                              onChange={handleInputChange}></textarea>
-                    {errors.description && <p style={{color: 'red'}}>{errors.description}</p>}
+                <div className="input-group">
+                    <label htmlFor="description" className="label">Description</label>
+                    <textarea className="textarea" id="description" name="description" rows="3" value={formData.description} onChange={handleInputChange}></textarea>
+                    {errors.description && <p className="error-message">{errors.description}</p>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="hashtags" className="form-label">Hashtags (space-separated)</label>
-                    <input type="text" className="form-control" id="hashtags" name="hashtags"
-                           value={formData.hashtags.join(' ')} onChange={handleHashtagsChange}/>
-                    {errors.hashtags && <p style={{color: 'red'}}>{errors.hashtags}</p>}
+                <div className="input-group">
+                    <label htmlFor="hashtags" className="label">Hashtags (space-separated)</label>
+                    <input type="text" className="input" id="hashtags" name="hashtags" value={formData.hashtags.join(' ')} onChange={handleHashtagsChange}/>
+                    {errors.hashtags && <p className="error-message">{errors.hashtags}</p>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="coverImage" className="form-label">Cover Image URL</label>
-                    <input type="text" className="form-control" id="coverImage" name="coverImage"
-                           value={formData.coverImage} onChange={handelImageChange} onKeyDown={handleKeyDown}/>
-                    {errors.coverImage && <p style={{color: 'red'}}>{errors.coverImage}</p>}
+                <div className="input-group">
+                    <label htmlFor="coverImage" className="label">Cover Image URL</label>
+                    <input type="text" className="input" id="coverImage" name="coverImage" value={formData.coverImage} onChange={handelImageChange} onKeyDown={handleKeyDown}/>
+                    {errors.coverImage && <p className="error-message">{errors.coverImage}</p>}
                 </div>
 
-                <div style={{display: "flex", justifyContent: "center", gap: "50px"}}>
-                    <button onClick={handleFormSubmit} className="btn">Save Changes</button>
-                    <button onClick={deletePlaylist} className="btn btn-danger">Delete</button>
+                <div className="double-button-container">
+                    <button onClick={handleFormSubmit} className="button">Save Changes</button>
+                    <button onClick={deletePlaylist} className="button-red">Delete</button>
                 </div>
-
-
             </form>
         </div>
     );
