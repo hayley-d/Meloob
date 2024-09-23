@@ -63,7 +63,9 @@ export function SignupForm() {
                 if (response.ok) {
                     sessionStorage.setItem('user', JSON.stringify(email));
                     sessionStorage.setItem('following', JSON.stringify([]));
-                    console.log('User added successfully');
+                    sessionStorage.setItem('userData', JSON.stringify(user));
+                    sessionStorage.setItem('isAdmin', JSON.stringify(isAdmin.isAdmin));
+
                     navigate("/home");
                 } else {
                     const errorData = await response.json();

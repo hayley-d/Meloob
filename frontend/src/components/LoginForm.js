@@ -34,8 +34,10 @@ export function LoginForm() {
                     const data = await response.json();
                     const user = data.user;
 
-                    const adminResponse = await fetch(`http://localhost:3001/api/admins/${user.id}`);
+                    const adminResponse = await fetch(`http://localhost:3001/api/admins/${user._id}`);
+
                     const isAdmin = await adminResponse.json()
+
 
                     sessionStorage.setItem('user', JSON.stringify(email));
                     sessionStorage.setItem('userData', JSON.stringify(user));

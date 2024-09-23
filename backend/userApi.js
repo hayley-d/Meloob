@@ -188,7 +188,7 @@ userRoutes.get('/users/:id', async (req, res) => {
         if (user) {
 
             const formatted = {
-                id: user._id.toString(),  // Convert ObjectId to string
+                id: user._id.toString(),
                 username: user.username,
                 email:user.email,
                 password: user.password,
@@ -199,13 +199,12 @@ userRoutes.get('/users/:id', async (req, res) => {
                 playlists_saved: user.playlists_saved,
                 description : user.description
             };
-            //console.log(formatted);
-            res.status(200).json(formatted);  // Return songs as JSON
+
+            res.status(200).json(formatted);
         } else {
-            res.status(404).json({ message: 'No user found' });
+            res.status(200).json({ message: 'No user found' });
         }
     } catch (error) {
-        console.error("Error fetching songs:", error);
         res.status(500).json({ error: 'Failed to fetch user' });
     }
 });
@@ -272,7 +271,7 @@ userRoutes.put('/user/:id', async (req, res) => {
 
         res.json(updatedUser);
     } catch (error) {
-        console.error(error);
+
         res.status(500).json({ message: "Server error" });
     }
 });
@@ -340,7 +339,7 @@ userRoutes.put('/user/admin/:id', async (req, res) => {
 
         res.json(updatedUser);
     } catch (error) {
-        console.error(error);
+
         res.status(500).json({ message: "Server error" });
     }
 });
@@ -406,7 +405,7 @@ userRoutes.put('/song/admin/:id', async (req, res) => {
 
         res.json(updatedSong);
     } catch (error) {
-        console.error(error);
+
         res.status(500).json({ message: "Server error" });
     }
 });
@@ -463,10 +462,10 @@ userRoutes.post('/login', async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(200).json({ message: 'User not found' });
         }
 
-        // Verify password
+
         const isMatch = await argon2.verify(user.password, password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid password' });
@@ -574,7 +573,7 @@ userRoutes.get('/playlists', async (req, res) => {
             res.status(404).json({ message: 'No playlist found' });
         }
     } catch (error) {
-        console.error("Error fetching playlists:", error);
+
         res.status(500).json({ error: 'Failed to fetch playlists' });
     }
 });
@@ -623,12 +622,11 @@ userRoutes.get('/songs', async (req, res) => {
                 link: song.link,
                 genre: song.genre
             }));
-            res.status(200).json(formattedSongs);  // Return songs as JSON
+            res.status(200).json(formattedSongs);
         } else {
-            res.status(404).json({ message: 'No songs found' });
+            res.status(200).json({ message: 'No songs found' });
         }
     } catch (error) {
-        console.error("Error fetching songs:", error);
         res.status(500).json({ error: 'Failed to fetch songs' });
     }
 });
@@ -1759,8 +1757,10 @@ userRoutes.get('/admins/:userId', async (req, res) => {
         const admin = await Admin.findOne({ userId }).exec();
 
         if (admin) {
+
             res.status(200).json({ isAdmin: true });
         } else {
+
             res.status(200).json({ isAdmin: false });
         }
     } catch (error) {

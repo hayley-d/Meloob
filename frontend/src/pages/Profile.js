@@ -22,9 +22,9 @@ export function Profile() {
                 await setUser(fetchedUser);
                 const following = JSON.parse(sessionStorage.getItem('userData')).following.find(user => user === id);
                 const owner = JSON.parse(sessionStorage.getItem('userData'))._id == id;
-                await setIsOwner(true);
+                await setIsOwner(owner);
                 if(following || owner){
-                    await setIsFollowing(true);
+                    await setIsFollowing(following);
                 }
                 if (fetchedUser) {
                     const {playlists_created, playlists_saved} = await fetchUserPlaylists(fetchedUser);
@@ -79,7 +79,7 @@ export function Profile() {
         <ProfileView onFollow={changeFollowing}/>
 
         {
-            isFollowing || isOwner ? (
+            isFollowing ? (
                     <div>
                         {createdPlaylists.length > 0 && <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
                             <h3 className="home-heading" style={{color: "#ff70a6"}}>Created</h3>
@@ -94,7 +94,24 @@ export function Profile() {
                         </div>}
                         {savedPlaylists.length > 0 && <PlaylistContainerHorizontal playlists={savedPlaylists}/>}
                     </div>
-            ) : null
+            ) : (
+                isOwner ? (
+                    <div>
+                        {createdPlaylists.length > 0 && <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
+                            <h3 className="home-heading" style={{color: "#ff70a6"}}>Created</h3>
+                            <hr/>
+                        </div>}
+                        {createdPlaylists.length > 0 && (
+                            <PlaylistContainerHorizontal playlists={createdPlaylists}/>
+                        )}
+                        {savedPlaylists.length > 0 && <div style={{width: "100vw", height: "fit-content", paddingLeft: "10vw"}}>
+                            <h3 className="home-heading" style={{color: "#70d6ff"}}>Saved</h3>
+                            <hr/>
+                        </div>}
+                        {savedPlaylists.length > 0 && <PlaylistContainerHorizontal playlists={savedPlaylists}/>}
+                    </div>
+                ) : null
+            )
         }
 
     </div>

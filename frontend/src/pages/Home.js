@@ -58,13 +58,15 @@ export class Home extends React.Component {
     async fetchSongs() {
         try {
             const songs = await dataManager.getSongs();
-            const filteredSongs = songs.filter(song => song.link !== 'redacted');
+            const filteredSongs = songs.filter(song => {
+                const regex = /^https:\/\/open\.spotify\.com\/track\/([a-zA-Z0-9]+)\?si=[a-zA-Z0-9]+$/;
+                return regex.test(song.link);
+            });
             this.setState({
                 songs: filteredSongs,
                 isLoading: false
             });
         } catch (error) {
-            console.error("Error fetching data:", error);
             this.setState({
                 isLoading: false,
                 error: "Failed to load data."

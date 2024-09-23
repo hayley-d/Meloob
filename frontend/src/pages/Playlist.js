@@ -15,7 +15,6 @@ export function Playlist() {
 
     useEffect(() => {
         setSessionUser(sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')) : '');
-       // console.log();
         const fetchPlaylist = async () => {
             setIsLoading(true);
 
@@ -58,7 +57,7 @@ export function Playlist() {
                     setSongs([]);
                 }
             } catch (error) {
-                console.error("Error fetching playlist:", error);
+                //console.error("Error fetching playlist:", error);
             } finally {
                 setIsLoading(false);
             }

@@ -11,7 +11,7 @@ export function EditPlaylistForm() {
     const [hashtags, setHashtags] = useState('');
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
-    const [coverImageUrl, setCoverImageUrl] = useState('https://octodex.github.com/images/vinyltocat.png');
+    const [coverImageUrl, setCoverImageUrl] = useState('https://opensource.com/sites/default/files/lead-images/rust_programming_crab_sea.png');
     const [selectedGenreOption, setSelectedGenreOption] = useState('1');
 
     useEffect(() => {
@@ -121,26 +121,56 @@ export function EditPlaylistForm() {
     }
 
     /**
+     * Validate if the input URL is a valid URL.
+     * @param {string} url - The URL to validate.
+     * @returns {boolean} - True if the URL is valid, false otherwise.
+     */
+    const isValidUrl = (url) => {
+        try {
+            new URL(url);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    };
+
+    /**
      * Handle changes to the cover image input field.
      * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
      */
     const handelImageChange = async (e) => {
         const url = e.target.value;
 
+        if (!isValidUrl(url)) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                coverImage: 'Invalid URL format',
+            }));
+            setCoverImageUrl('https://opensource.com/sites/default/files/lead-images/rust_programming_crab_sea.png');
+            return;
+        } else {
+            setErrors((prevErrors) => ({ ...prevErrors, coverImage: null }));
+        }
+
         try {
-            const response = await fetch(url,  {mode: 'no-cors'});
-            if (response.ok) {
+            const response = await fetch(url, { mode: 'no-cors' });
+            if (response.ok || response.type === 'opaque') {
                 setFormData({ ...formData, coverImage: url });
                 setCoverImageUrl(url);
             } else {
                 throw new Error('Image not found');
             }
         } catch (error) {
-            console.error('Error loading image:', error);
+
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                coverImage: 'Image not found at the provided URL',
+            }));
             setFormData({ ...formData, coverImage: '' });
-            setCoverImageUrl('https://octodex.github.com/images/vinyltocat.png');
+            setCoverImageUrl('https://opensource.com/sites/default/files/lead-images/rust_programming_crab_sea.png');
         }
     };
+
 
     /**
      * Handle key down events in the hashtags input field.

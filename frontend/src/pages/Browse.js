@@ -179,19 +179,33 @@ export function Browse() {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchParams] = useSearchParams();
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchData = async () => {
+            setIsLoading(true);
             try {
-                const playlistsData = await dataManager.getPlaylists().finally();
-                const songsData = await dataManager.getSongs().finally();
-                const userData = await dataManager.getUsers().finally();
-                setPlaylists(playlistsData);
-                const filteredSongs = songsData.filter(song => song.link !== 'redacted');
-                setSongs(filteredSongs);
+                const playlistsData = await dataManager.getPlaylists();
+                playlistsData.sort((a, b) => {
+                    const [dayA, monthA, yearA] = a.date_created.split('/');
+                    const [dayB, monthB, yearB] = b.date_created.split('/');
+                    const dateA = new Date(`20${yearA}-${monthA}-${dayA}`);
+                    const dateB = new Date(`20${yearB}-${monthB}-${dayB}`);
+                    return dateB - dateA;
+                });
+                const songsData = await dataManager.getSongs();
+                const userData = await dataManager.getUsers();
+
+
+                const filteredSongs = songsData.filter(song => {
+                    const regex = /^https:\/\/open\.spotify\.com\/track\/([a-zA-Z0-9]+)\?si=[a-zA-Z0-9]+$/;
+                    return regex.test(song.link);
+                });
+
                 const filteredUsers = userData.filter(user => user.username !== 'deletedUser');
+
+                setPlaylists(playlistsData);
+                setSongs(filteredSongs);
                 setUsers(filteredUsers);
             } catch (error) {
-                console.error("Error fetching data:", error);
                 setError("Failed to load data.");
             } finally {
                 setIsLoading(false);
@@ -200,6 +214,7 @@ export function Browse() {
 
         fetchData();
     }, []);
+
 
     useEffect(() => {
         if (playlists.length > 0 && songs.length > 0) {
@@ -214,6 +229,8 @@ export function Browse() {
             }
         }
     }, [playlists, songs,users]);
+
+
 
 
 

@@ -105,7 +105,7 @@ export function AddPlaylistForm() {
                 throw new Error('Image not found');
             }
         } catch (error) {
-            console.error('Error loading image:', error);
+
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 coverImage: 'Image not found at the provided URL',

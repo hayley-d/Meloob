@@ -21,7 +21,7 @@ export function Comment({comment}) {
     const route = `/profile/${comment.userId}`;
 
     if (!comment || !comment.user) {
-        return <div>Loading comment...</div>;
+        return <div></div>;
     }
 
     return (
