@@ -446,11 +446,13 @@
     height:fit-content;
     justify-content: center;
     align-items: center;
+    margin-top: 40px;
 }
 
 .button-grid{
     padding:50px;
     display: grid;
+    gap:30px;
     grid-template-columns: 1fr 1fr 1fr;
 }
 
@@ -477,4 +479,9 @@
     display: flex;
     flex-direction: column;
     gap:50px;
+}
+
+.admin-search-container{
+    display: flex;
+    gap:30px;
 }

@@ -13,6 +13,7 @@ import {EditPlaylist} from "./pages/EditPlaylist";
 import {AddPlaylist} from "./pages/AddPlaylist";
 import {AddSongToPlaylist} from "./pages/AddSongToPlaylist";
 import {Admin} from "./pages/Admin";
+import {Logout} from "./pages/Logout";
 
 const router = createBrowserRouter(
             
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
         {path:'/add/playlist',element:<AddPlaylist/>},
         {path:'/add/song',element:<AddSong/>},
         {path:'/admin',element:<Admin/>},
+        {path:'/logout',element:<Logout/>},
     ]
 );
 

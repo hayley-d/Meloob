@@ -46,9 +46,6 @@ export function Profile() {
             const playlists_created = await dataManager.getPlaylistsByIds(user.playlists_created);
             const playlists_saved = await dataManager.getPlaylistsByIds(user.playlists_saved);
 
-            playlists_saved.map(p => p.user = user);
-            playlists_created.map(p => p.user = user);
-
             return {playlists_created, playlists_saved};
         } catch (error) {
             console.error('Error fetching playlists:', error);

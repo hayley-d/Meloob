@@ -49,40 +49,60 @@ export function Song({song,remove,playlist,onRemove}) {
     
 
     return (
-        <div className="song-card">
-            <div className="song-card-header">
-                <div className="song-dots" title="Add song to playlist">
-                    {!remove ? (
-                            <Link to={route}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="#ff70a6" className="bi bi-three-dots" viewBox="0 0 16 16">
-                                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-                                </svg>
-                            </Link>) :
-                        (
-                            <div onClick={removeMe} title="Remove" style={{cursor: 'pointer'}}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="#ff70a6" className="bi bi-three-dots" viewBox="0 0 16 16">
-                                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-                                </svg>
-                            </div>
-                        )}
+        song.link === 'redacted' ?(
+                <div className="song-card-dark">
+                    <div className="song-card-header">
+                        <h3 className="song-title-dark" title={song.title}>{song.title}</h3>
+                    </div>
+                    <div className="song-link">
+                        <svg xmlns="http://www.w3.org/2000/svg"  width="50px" height="50px" fill="#8B0000FF" className="bi bi-ban" viewBox="0 0 16 16">
+                            <path d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"/>
+                        </svg>
+                    </div>
+                    <div className="song-card-header">
+                        <p className="song-card-footer-dark">{song.artist}</p>
+                    </div>
                 </div>
-                <h3 className="song-title" title={song.title}>{song.title}</h3>
+        ) : (
+            <div className="song-card">
+                <div className="song-card-header">
+                        <div className="song-dots" title="Add song to playlist">
+                            {!remove ? (
+                                    <Link to={route}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="#ff70a6"
+                                             className="bi bi-three-dots" viewBox="0 0 16 16">
+                                            <path
+                                                d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                                        </svg>
+                                    </Link>) :
+                                (
+                                    <div onClick={removeMe} title="Remove" style={{cursor: 'pointer'}}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                             fill="#ff70a6" className="bi bi-three-dots" viewBox="0 0 16 16">
+                                            <path
+                                                d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                                        </svg>
+                                    </div>
+                                )}
+                        </div>
+                        <h3 className="song-title" title={song.title}>{song.title}</h3>
 
-            </div>
-            <div className="song-link">
-                <a href={song.link} target="_blank" rel="noopener noreferrer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" fill="#70d6ff" className="bi bi-play-circle" viewBox="0 0 16 16">
-                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                        <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
-                    </svg>
-                </a>
-            </div>
-            <div className="song-card-header">
-                <p className="song-card-footer">{song.artist}</p>
-            </div>
-
-
-        </div>
+                    </div>
+                    <div className="song-link">
+                        <a href={song.link} target="_blank" rel="noopener noreferrer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" fill="#70d6ff"
+                                 className="bi bi-play-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path
+                                    d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div className="song-card-header">
+                        <p className="song-card-footer">{song.artist}</p>
+                    </div>
+                </div>
+            )
     );
 }
 

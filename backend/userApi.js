@@ -278,6 +278,140 @@ userRoutes.put('/user/:id', async (req, res) => {
 });
 
 /**
+ * Updates the details of a user by their ID.
+ *
+ * @route PUT /api/user/:id
+ * @param {string} id - The ID of the user to update.
+ * @param {Object} req.body - The details to update for the user.
+ * @param {string} [req.body.username] - The new username of the user.
+ * @param {string} [req.body.description] - The new description of the user.
+ * @param {string} [req.body.profile_picture] - The new profile picture URL of the user.
+ * @returns {Object} - The updated user object.
+ * @throws {Error} - Returns a 404 status code if the user is not found or a 500 status code for server errors.
+ *
+ * @example
+ * // Request body:
+ * {
+ *   "username": "newUsername",
+ *   "description": "Updated user description",
+ *   "profile_picture": "newProfilePic.jpg"
+ * }
+ *
+ * // Successful response example:
+ * {
+ *   "id": "64e3f1bc9f12a61d2c5a4c58",
+ *   "username": "newUsername",
+ *   "email": "user@example.com",
+ *   "profile_picture": "newProfilePic.jpg",
+ *   "followers": ["64e3f1bc9f12a61d2c5a4c57"],
+ *   "following": ["64e3f1bc9f12a61d2c5a4c59"],
+ *   "playlists_created": ["64e3f1bc9f12a61d2c5a4c5a"],
+ *   "playlists_saved": ["64e3f1bc9f12a61d2c5a4c5b"],
+ *   "description": "Updated user description"
+ * }
+ *
+ * @example
+ * // Error response example:
+ * // User not found
+ * {
+ *   "message": "User not found"
+ * }
+ *
+ * // Server error
+ * {
+ *   "message": "Server error"
+ * }
+ */
+userRoutes.put('/user/admin/:id', async (req, res) => {
+    const { id } = req.params;
+    const { username,email, description, profile_picture } = req.body;
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(id, {
+            username,
+            email,
+            description,
+            profile_picture,
+        }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json(updatedUser);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+/**
+ * Updates the details of a Song by its ID.
+ *
+ * @route PUT /api/song/admin/:id
+ * @param {string} id - The ID of the song to update.
+ * @param {Object} req.body - The details to update for the song.
+ * @param {string} [req.body.title] - The new title of the song.
+ * @param {string} [req.body.artist] - The new artist of the song.
+ * @param {string} [req.body.link] - The new song link.
+ * @param {string} [req.body.genre] - The new genre ID of the song.
+ * @returns {Object} - The updated song object.
+ * @throws {Error} - Returns a 404 status code if the song is not found or a 500 status code for server errors.
+ *
+ * @example
+ * // Request body:
+ * {
+ *   "title": "New Song Title",
+ *   "artist": "New Artist Name",
+ *   "link": "https://open.spotify.com/track/newSongId",
+ *   "genre": "66e377a9b13b146f637c19e9"
+ * }
+ *
+ * // Successful response example:
+ * {
+ *   "id": "64e3f1bc9f12a61d2c5a4c58",
+ *   "title": "New Song Title",
+ *   "artist": "New Artist Name",
+ *   "link": "https://open.spotify.com/track/newSongId",
+ *   "genre": "66e377a9b13b146f637c19e9"
+ * }
+ *
+ * @example
+ * // Error response example:
+ * // Song not found
+ * {
+ *   "message": "Song not found"
+ * }
+ *
+ * // Server error
+ * {
+ *   "message": "Server error"
+ * }
+ */
+userRoutes.put('/song/admin/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title,artist, link, genre } = req.body;
+
+    try {
+        const updatedSong = await Song.findByIdAndUpdate(id, {
+            title,
+            artist,
+            link,
+            genre,
+        }, { new: true });
+
+        if (!updatedSong) {
+            return res.status(404).json({ message: "Song not found" });
+        }
+
+        res.json(updatedSong);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+/**
  * Logs a user in by verifying their email and password.
  *
  * @route POST /api/login
@@ -344,6 +478,36 @@ userRoutes.post('/login', async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * Logs a user out by destroying their session.
+ *
+ * This route clears the user's session data to effectively log them out.
+ * It returns a success message upon successful logout.
+ *
+ * @route POST /api/logout
+ * @returns {Object} - A response object with a success message if logout is successful.
+ * @throws {Error} - Returns a 500 status code for server errors.
+ *
+ * @example
+ * // Successful response example:
+ * {
+ *   "message": "Logout successful"
+ * }
+ */
+userRoutes.post('/logout', (req, res) => {
+    try {
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).json({ message: 'Failed to log out', error: err.message });
+            }
+
+            res.status(200).json({ message: 'Logout successful' });
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Logout failed', error: error.message });
     }
 });
 
@@ -774,21 +938,24 @@ userRoutes.post('/playlists', async (req, res) => {
             }).exec();
             const genres = await Genre.find().exec();
             if (playlists && playlists.length > 0) {
-                const formatted = playlists.map(playlist => {
-                const genre_name = genres.find(g => g._id.toString() === playlist.genre.toString());
-                return {
-                    id: playlist._id.toString(),  
-                    userId: playlist.userId,
-                    coverImage: playlist.coverImage,
-                    date_created: playlist.date_created,
-                    genre: genre_name.name, 
-                    name: playlist.name,
-                    description: playlist.description,
-                    hashtags: playlist.hashtags,
-                    songs: playlist.songs
-                };
-            });
-                res.status(200).json(formatted);
+                const formattedPlaylists = await Promise.all(playlists.map(async (playlist) => {
+                    const genre = genres.find(g => g._id.toString() === playlist.genre.toString());
+                    const user = await User.findById(playlist.userId).exec();
+                    return {
+                        id: playlist._id.toString(),
+                        userId: playlist.userId,
+                        coverImage: playlist.coverImage,
+                        date_created: playlist.date_created,
+                        genre: genre ? genre.name : null,
+                        name: playlist.name,
+                        description: playlist.description,
+                        hashtags: playlist.hashtags,
+                        songs: playlist.songs,
+                        user: user || null
+                    };
+                }));
+
+                res.status(200).json(formattedPlaylists);
             }
         } catch (error) {
             res.status(500).json({ message: 'Error fetching playlists', error: error.message });
@@ -1601,5 +1768,215 @@ userRoutes.get('/admins/:userId', async (req, res) => {
         res.status(500).json({ error: 'Failed to check admin status' });
     }
 });
+
+/**
+ * Deletes a user by ID from the database.
+ *
+ * @route DELETE /api/users/:userId
+ * @param {string} userId - The ID of the user to delete.
+ *
+ * @example
+ * // Request URL:
+ * DELETE /api/users/64e3f1bc9f12a61d2c5a4c57
+ *
+ * // Successful response example:
+ * {
+ *   message: "User deleted successfully"
+ * }
+ *
+ * @throws {Error} - Returns a 404 if the user is not found, or a 500 if there's a server error.
+ */
+userRoutes.delete('/users/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await User.findByIdAndDelete(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ error: 'Failed to delete user' });
+    }
+});
+
+
+/**
+ * Deletes a song by ID from the database.
+ *
+ * @route DELETE /api/songs/:songId
+ * @param {string} songId - The ID of the song to delete.
+ *
+ * @example
+ * // Request URL:
+ * DELETE /api/songs/64e3f1bc9f12a61d2c5a4c56
+ *
+ * // Successful response example:
+ * {
+ *   message: "Song deleted successfully"
+ * }
+ *
+ * @throws {Error} - Returns a 404 if the song is not found, or a 500 if there's a server error.
+ */
+userRoutes.delete('/songs/:songId', async (req, res) => {
+    const { songId } = req.params;
+    try {
+        const song = await Song.findByIdAndDelete(songId);
+        if (!song) {
+            return res.status(404).json({ message: 'Song not found' });
+        }
+        res.status(200).json({ message: 'Song deleted successfully' });
+    } catch (error) {
+        console.error("Error deleting song:", error);
+        res.status(500).json({ error: 'Failed to delete song' });
+    }
+});
+
+/**
+ * Deletes a playlist and updates the users' playlists_saved and playlists_created arrays.
+ *
+ * @route DELETE /api/playlists/:playlistId
+ * @param {string} req.params.playlistId - The ID of the playlist to delete.
+ * @returns {Object} - A success message if the playlist is deleted successfully.
+ *
+ * @example
+ * // Request URL:
+ * DELETE /api/playlists/64e3f1bc9f12a61d2c5a4c59
+ *
+ * // Successful response example:
+ * {
+ *   "message": "Playlist deleted successfully"
+ * }
+ *
+ * @throws {Error} - Returns a 404 status code if the playlist is not found.
+ * @throws {Error} - Returns a 500 status code if there's an issue deleting the playlist or updating users.
+ */
+userRoutes.delete('/playlists/:playlistId', async (req, res) => {
+    const { playlistId } = req.params;
+    try {
+        const playlist = await Playlist.findByIdAndDelete(playlistId);
+
+        if (!playlist) {
+            return res.status(404).json({ message: 'Playlist not found' });
+        }
+
+        await User.updateMany(
+            { $or: [{ playlists_created: playlistId }, { playlists_saved: playlistId }] },
+            { $pull: { playlists_created: playlistId, playlists_saved: playlistId } }
+        );
+
+        res.status(200).json({ message: 'Playlist deleted successfully' });
+    } catch (error) {
+        console.error("Error deleting playlist:", error);
+        res.status(500).json({ error: 'Failed to delete playlist or update users' });
+    }
+});
+
+/**
+ * Marks a user as deleted and removes the user from followers and following arrays of other users.
+ *
+ * @route DELETE /api/users/admin/:userId
+ * @param {string} req.params.userId - The ID of the user to be marked as deleted.
+ * @returns {Object} - A success message and the updated user object.
+ *
+ * @example
+ * // Request URL:
+ * DELETE /api/users/admin/64e3f1bc9f12a61d2c5a4c56
+ *
+ * // Successful response example:
+ * {
+ *   "message": "User marked as deleted successfully",
+ *   "user": {
+ *     "_id": "64e3f1bc9f12a61d2c5a4c56",
+ *     "username": "deletedUser",
+ *     "profile_picture": "https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg",
+ *     "description": "",
+ *     "email": "redacted@email.com"
+ *   }
+ * }
+ *
+ * @throws {Error} - Returns a 404 status code if the user is not found.
+ * @throws {Error} - Returns a 500 status code if there's an issue updating the user or removing the user from other users' arrays.
+ */
+userRoutes.delete('/users/admin/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        // Update the user to mark as deleted
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                username: 'deletedUser',
+                profile_picture: 'https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg',
+                description: '',
+                email: 'redacted@email.com',
+                following:[],
+                followers:[]
+            },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        await User.updateMany(
+            { $or: [{ followers: userId }, { following: userId }] },
+            { $pull: { followers: userId, following: userId } }
+        );
+
+        res.status(200).json({ message: 'User marked as deleted successfully', user: updatedUser });
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ error: 'Failed to update user or remove from followers/following' });
+    }
+});
+
+
+/**
+ * Marks a song as redacted by updating its link to 'redacted'.
+ *
+ * @route DELETE /api/songs/:songId
+ * @param {string} req.params.songId - The ID of the song to be updated.
+ * @returns {Object} - A success message and the updated song object.
+ *
+ * @example
+ * // Request URL:
+ * DELETE /api/songs/admin/64e3f1bc9f12a61d2c5a4c57
+ *
+ * // Successful response example:
+ * {
+ *   "message": "Song marked as redacted successfully",
+ *   "song": {
+ *     "_id": "64e3f1bc9f12a61d2c5a4c57",
+ *     "title": "Song Title",
+ *     "artist": "Artist Name",
+ *     "link": "redacted",
+ *     "genre": "Pop"
+ *   }
+ * }
+ *
+ * @throws {Error} - Returns a 404 status code if the song is not found.
+ * @throws {Error} - Returns a 500 status code if there's an issue updating the song.
+ */
+userRoutes.delete('/songs/admin/:songId', async (req, res) => {
+    const { songId } = req.params;
+    try {
+        const updatedSong = await Song.findByIdAndUpdate(
+            songId,
+            { link: 'redacted' },
+            { new: true }
+        );
+
+        if (!updatedSong) {
+            return res.status(404).json({ message: 'Song not found' });
+        }
+
+        res.status(200).json({ message: 'Song marked as redacted successfully', song: updatedSong });
+    } catch (error) {
+        console.error("Error updating song:", error);
+        res.status(500).json({ error: 'Failed to update song' });
+    }
+});
+
 
 module.exports = userRoutes;

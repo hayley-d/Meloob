@@ -9,7 +9,7 @@ export function UserPreview({user}) {
     }
 
     useEffect(() => {
-        console.log(user)
+        //console.log(user)
     },[])
 
     return (

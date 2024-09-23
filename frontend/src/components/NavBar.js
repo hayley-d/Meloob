@@ -56,7 +56,12 @@ import dataManager from "../utils/dataManager";
                       <>
                           <NavLink className="navlink" to='/home'>Home</NavLink>
                           <NavLink className="navlink" to='/browse'>Browse</NavLink>
+
                           {isAdmin ? (<NavLink className="navlink" to='/admin'>Admin</NavLink>) : null}
+                          {user ? (
+                              <NavLink className="navlink" to='/logout'>Logout</NavLink>
+                          ) : null}
+
                           {user ? (
                               <NavLink className="navlink" to={`/profile/${user.id}`}>
                                   <div id="profileImg"  style={{ backgroundImage: `url(${this.state.user.profile_picture})` }}></div>
