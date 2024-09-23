@@ -186,8 +186,10 @@ export function Browse() {
                 const songsData = await dataManager.getSongs().finally();
                 const userData = await dataManager.getUsers().finally();
                 setPlaylists(playlistsData);
-                setSongs(songsData);
-                setUsers(userData);
+                const filteredSongs = songsData.filter(song => song.link !== 'redacted');
+                setSongs(filteredSongs);
+                const filteredUsers = userData.filter(user => user.username !== 'deletedUser');
+                setUsers(filteredUsers);
             } catch (error) {
                 console.error("Error fetching data:", error);
                 setError("Failed to load data.");

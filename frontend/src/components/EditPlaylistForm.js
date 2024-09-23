@@ -7,6 +7,7 @@ export function EditPlaylistForm() {
     const { id } = useParams();
     const [formData, setFormData] = useState({ name: '', description: '', hashtags: [], genre: '', cover_image: '' });
     const [isLoading, setIsLoading] = useState(true);
+    const [genres, setGenres] = useState([]);
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
     const [coverImageUrl, setCoverImageUrl] = useState('https://octodex.github.com/images/vinyltocat.png');
@@ -41,6 +42,19 @@ export function EditPlaylistForm() {
         //console.log("Form data updated:", formData);
     }, [formData]);
 
+    useEffect(() => {
+        const fetchGenres = async () => {
+            try {
+                const fetchedGenres = await dataManager.getGenres();
+                setGenres(fetchedGenres);
+            } catch (error) {
+                console.error("Error fetching genres:", error);
+            }
+        };
+
+        fetchGenres();
+    }, []);
+
     /**
      * Handle changes to input fields.
      * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} e - The change event.
@@ -65,44 +79,14 @@ export function EditPlaylistForm() {
         });
     };
 
-    const handelGenreChange = async (e) => {
-        const option = e.target.value;
-        const genreId = getGenreId(option);
-        setSelectedGenreOption(option);
+    const handelGenreChange = (e) => {
+        const genreId = e.target.value;
+        setSelectedGenreOption(genreId);
         setFormData((prevData) => ({
             ...prevData,
             genre: genreId,
         }));
-
     };
-
-    const getGenreId = (option)  => {
-        if(option == 1){
-            return "66e377a9b13b146f637c19e8";//Pop
-        }
-        else if (option == 2){
-            return "66e377a9b13b146f637c19e9";//Jazz
-        }
-        else if(option == 3){
-            return "66e377a9b13b146f637c19e7";//Rock
-        }
-        else if (option == 4){
-            return "66e377a9b13b146f637c19eb";//Rap
-        }
-        else if(option == 5){
-            return "66e377a9b13b146f637c19ec";//Folk
-        }
-        else if (option == 6){
-            return "66e377a9b13b146f637c19ed";//Lo-Fi
-        }
-        else if(option == 7){
-            return "66e377a9b13b146f637c19ee";//Indie
-        }
-        else {
-            return "66e377a9b13b146f637c19ea";//Classic
-        }
-    };
-
 
     /**
      * Handle form submission.
@@ -185,15 +169,11 @@ export function EditPlaylistForm() {
                 </div>
                 <div className="input-group">
                     <label htmlFor="genre" className="label">Genre</label>
-                    <select className="select" id="genre" name="genre" value={selectedGenreOption} onChange={handelGenreChange}>
-                        <option value="1">Pop</option>
-                        <option value="2">Jazz</option>
-                        <option value="3">Rock</option>
-                        <option value="4">Rap</option>
-                        <option value="5">Folk</option>
-                        <option value="6">Lo-Fi</option>
-                        <option value="7">Indie</option>
-                        <option value="8">Classic</option>
+                    <select className="select" id="genre" name="genre" value={selectedGenreOption}
+                            onChange={handelGenreChange}>
+                        {genres.map((genre, index) => (
+                            <option key={index} value={genre._id}>{genre.name}</option>
+                        ))}
                     </select>
                     {errors.genre && <p className="error-message">{errors.genre}</p>}
                 </div>

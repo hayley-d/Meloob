@@ -35,7 +35,6 @@ export function AdminEditPlaylist({id}) {
         fetchPlaylist();
     }, [id]);
 
-    // New useEffect to fetch genres
     useEffect(() => {
         const fetchGenres = async () => {
             try {

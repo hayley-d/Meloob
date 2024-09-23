@@ -50,8 +50,9 @@ export class Home extends React.Component {
     async fetchSongs() {
         try {
             const songs = await dataManager.getSongs();
+            const filteredSongs = songs.filter(song => song.link !== 'redacted');
             this.setState({
-                songs: songs,
+                songs: filteredSongs,
                 isLoading: false
             });
         } catch (error) {
