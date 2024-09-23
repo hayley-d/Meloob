@@ -8,6 +8,7 @@ export function EditPlaylistForm() {
     const [formData, setFormData] = useState({ name: '', description: '', hashtags: [], genre: '', cover_image: '' });
     const [isLoading, setIsLoading] = useState(true);
     const [genres, setGenres] = useState([]);
+    const [hashtags, setHashtags] = useState('');
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
     const [coverImageUrl, setCoverImageUrl] = useState('https://octodex.github.com/images/vinyltocat.png');
@@ -24,10 +25,11 @@ export function EditPlaylistForm() {
                     name: playlist.name,
                     description: playlist.description,
                     hashtags: playlist.hashtags,
-                    genre: playlist.genre,
+                    genre: '66e377a9b13b146f637c19e7',
                     coverImage: playlist.coverImage,
                 });
                 setCoverImageUrl(playlist.coverImage);
+
             } catch (error) {
                 console.error("Error fetching playlist:", error);
             } finally {
@@ -39,21 +41,21 @@ export function EditPlaylistForm() {
     }, [id]);
 
     useEffect(() => {
-        //console.log("Form data updated:", formData);
-    }, [formData]);
-
-    useEffect(() => {
         const fetchGenres = async () => {
             try {
                 const fetchedGenres = await dataManager.getGenres();
                 setGenres(fetchedGenres);
+
+                setSelectedGenreOption(formData.genre)
+                setHashtags(formData.hashtags.join(' '))
             } catch (error) {
                 console.error("Error fetching genres:", error);
             }
         };
 
         fetchGenres();
-    }, []);
+    }, [isLoading]);
+
 
     /**
      * Handle changes to input fields.
@@ -71,17 +73,18 @@ export function EditPlaylistForm() {
      * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
      */
     const handleHashtagsChange = (e) => {
-        // Split the input value by spaces and filter out any empty strings
         const hashtags = e.target.value.split(' ').filter(tag => tag.trim() !== '');
         setFormData({
             ...formData,
             hashtags,
         });
+        setHashtags(e.target.value)
     };
 
     const handelGenreChange = (e) => {
         const genreId = e.target.value;
         setSelectedGenreOption(genreId);
+        //console.log(genreId);
         setFormData((prevData) => ({
             ...prevData,
             genre: genreId,
@@ -94,6 +97,11 @@ export function EditPlaylistForm() {
      */
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const formt_hashtags = hashtags.split(' ').filter(tag => tag.trim() !== '');
+        setFormData({
+            ...formData,
+            hashtags: formt_hashtags,
+        });
         const validationErrors = Validator.validateEditPlaylist(formData);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -184,7 +192,7 @@ export function EditPlaylistForm() {
                 </div>
                 <div className="input-group">
                     <label htmlFor="hashtags" className="label">Hashtags (space-separated)</label>
-                    <input type="text" className="input" id="hashtags" name="hashtags" value={formData.hashtags.join(' ')} onChange={handleHashtagsChange}/>
+                    <input type="text" className="input" id="hashtags" name="hashtags" value={hashtags} onChange={handleHashtagsChange}/>
                     {errors.hashtags && <p className="error-message">{errors.hashtags}</p>}
                 </div>
                 <div className="input-group">

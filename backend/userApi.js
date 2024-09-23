@@ -1931,7 +1931,6 @@ userRoutes.delete('/users/admin/:userId', async (req, res) => {
     }
 });
 
-
 /**
  * Marks a song as redacted by updating its link to 'redacted'.
  *
@@ -1975,6 +1974,44 @@ userRoutes.delete('/songs/admin/:songId', async (req, res) => {
     } catch (error) {
         console.error("Error updating song:", error);
         res.status(500).json({ error: 'Failed to update song' });
+    }
+});
+
+/**
+ * Creates a new genre.
+ *
+ * @route POST /api/genres
+ * @param {Object} genre - The genre object to create.
+ * @param {string} genre.name - The name of the genre.
+ * @returns {Object} - The created genre object.
+ * @throws {Error} - Returns a 400 status code for validation errors.
+ *
+ * @example
+ * // Successful response example:
+ * {
+ *   "id": "64e3f1bc9f12a61d2c5a4c59",
+ *   "name": "newGenre"
+ * }
+ *
+ * @example
+ * // Error response example:
+ * {
+ *   "error": "Genre name is required"
+ * }
+ */
+userRoutes.post('/genres', async (req, res) => {
+    const { name } = req.body;
+
+    if (!name) {
+        return res.status(400).json({ error: 'Genre name is required' });
+    }
+
+    try {
+        const newGenre = new Genre({ name });
+        await newGenre.save();
+        res.status(201).json(newGenre);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
 });
 

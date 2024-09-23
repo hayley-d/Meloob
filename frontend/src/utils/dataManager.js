@@ -843,6 +843,35 @@ class DataManager {
         }
     }
 
+    /**
+     * Creates a new genre.
+     *
+     * @param {string} genreName - The name of the genre to create.
+     * @returns {Promise<Object>} - The created genre object.
+     * @throws {Error} - Throws an error if the request fails.
+     */
+    async createGenre(genreName) {
+        try {
+            const response = await fetch('/api/genres', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: genreName }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to create genre');
+            }
+
+            const createdGenre = await response.json();
+            return createdGenre;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
 }
 
 const dataManager = new DataManager();

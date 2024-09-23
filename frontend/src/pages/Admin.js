@@ -9,6 +9,7 @@ import Fuse from "fuse.js";
 import {AdminEditUser} from "../components/AdminEditUser";
 import {AdminEditSong} from "../components/AdminEditSong";
 import {AdminEditPlaylist} from "../components/AdminEditPlaylist";
+import {AdminAddGenre} from "../components/AdminAddGenre";
 
 export function Admin() {
     const [users, setUsers] = useState([]);
@@ -140,6 +141,14 @@ export function Admin() {
         }
     };
 
+    const addGenre = async (genreName) => {
+        try {
+            await dataManager.createGenre(genreName);
+        } catch (error) {
+            setError('Failed to create genre');
+        }
+    };
+
     const handelEditUser = async (userId) => {
         setEditUserId(userId);
         setEditUser(prevState => !prevState);
@@ -220,7 +229,9 @@ export function Admin() {
                             <button className="button-red">Delete All Songs</button>
                         </div>
                     </div>
+                    <AdminAddGenre />
                 </div>
+
             </div>
             {editUser ? (
                 <AdminEditUser id={editUserId}/>
@@ -231,6 +242,7 @@ export function Admin() {
             {editSong ? (
                 <AdminEditSong song={editSongId}/>
             ) : null}
+
         </div>
 
     );

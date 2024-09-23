@@ -63,6 +63,7 @@ export function AddPlaylistForm() {
      */
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+
         const validationErrors = Validator.validateEditPlaylist(formData);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -184,8 +185,7 @@ export function AddPlaylistForm() {
                 </div>
                 <div className="input-group">
                     <label htmlFor="hashtags" className="label">Hashtags (space-separated)</label>
-                    <input type="text" className={`input ${errors.hashtags ? "input-error" : ""}`} id="hashtags" name="hashtags"
-                           value={formData.hashtags.join(' ')} onChange={handleHashtagsChange}/>
+                    <input type="text" className={`input ${errors.hashtags ? "input-error" : ""}`} id="hashtags" onChange={handleHashtagsChange} name="hashtags"/>
                     {errors.hashtags && <p style={{color: 'red'}}>{errors.hashtags}</p>}
                 </div>
                 <div className="input-group">

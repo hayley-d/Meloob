@@ -7,7 +7,6 @@ export function AdminEditSong({song}) {
     const [formData, setFormData] = useState({ title: song.title, artist: song.artist, link: song.link, genre: '' });
     const [genres, setGenres] = useState([]);
     const navigate = useNavigate();
-    const [errors, setErrors] = useState({});
     const [linkUrl, setLinkUrl] = useState({});
     const [selectedGenreOption, setSelectedGenreOption] = useState('');
 

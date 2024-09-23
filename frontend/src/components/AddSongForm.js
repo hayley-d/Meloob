@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import dataManager from '../utils/dataManager';
 import { Validator } from "../utils/Validator";
@@ -7,9 +7,23 @@ import '../../public/assets/css/FormStyles.css';
 export function AddSongForm() {
     const [formData, setFormData] = useState({ title: '',artist:'', link: '',genre: '66e377a9b13b146f637c19e8' });
     const navigate = useNavigate();
+    const [genres, setGenres] = useState([]);
     const [errors, setErrors] = useState({});
     const [linkUrl, setLinkUrl] = useState({});
     const [selectedGenreOption, setSelectedGenreOption] = useState('1');
+
+    useEffect(() => {
+        const fetchGenres = async () => {
+            try {
+                const fetchedGenres = await dataManager.getGenres();
+                setGenres(fetchedGenres);
+            } catch (error) {
+                console.error("Error fetching genres:", error);
+            }
+        };
+
+        fetchGenres();
+    }, []);
 
     /**
      * Handle changes to input fields.
@@ -80,40 +94,12 @@ export function AddSongForm() {
     };
 
     const handelGenreChange = (e) => {
-        const option = e.target.value;
-        const genreId = getGenreId(option);
-        setSelectedGenreOption(option);
+        const genreId = e.target.value;
+        setSelectedGenreOption(genreId);
         setFormData((prevData) => ({
             ...prevData,
             genre: genreId,
         }));
-    };
-
-    const getGenreId = (option)  => {
-        if(option == 1){
-            return "66e377a9b13b146f637c19e8";//Pop
-        }
-        else if (option == 2){
-            return "66e377a9b13b146f637c19e9";//Jazz
-        }
-        else if(option == 3){
-            return "66e377a9b13b146f637c19e7";//Rock
-        }
-        else if (option == 4){
-            return "66e377a9b13b146f637c19eb";//Rap
-        }
-        else if(option == 5){
-            return "66e377a9b13b146f637c19ec";//Folk
-        }
-        else if (option == 6){
-            return "66e377a9b13b146f637c19ed";//Lo-Fi
-        }
-        else if(option == 7){
-            return "66e377a9b13b146f637c19ee";//Indie
-        }
-        else {
-            return "66e377a9b13b146f637c19ea";//Classic
-        }
     };
 
 
@@ -128,19 +114,11 @@ export function AddSongForm() {
                 </div>
                 <div className="input-group">
                     <label htmlFor="profile-image" className="label">Genre</label>
-                    <select className="select"
-                            id="genre"
-                            name="genre"
-                            value={selectedGenreOption}
+                    <select className="select" id="genre" name="genre" value={selectedGenreOption}
                             onChange={handelGenreChange}>
-                        <option value="1">Pop</option>
-                        <option value="2">Jazz</option>
-                        <option value="3">Rock</option>
-                        <option value="4">Rap</option>
-                        <option value="5">Folk</option>
-                        <option value="6">Lo-Fi</option>
-                        <option value="7">Indie</option>
-                        <option value="8">Classic</option>
+                        {genres.map((genre, index) => (
+                            <option key={index} value={genre._id}>{genre.name}</option>
+                        ))}
                     </select>
                     {errors.genre && <p className="error-message">{errors.genre}</p>}
                 </div>
