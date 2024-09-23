@@ -1,13 +1,71 @@
-#Build Image
-docker build -t u21528790 .
 
-#Run Image
-docker run --name app -p 3001:3001 u21528790
+# Meloob
 
-#Stop run
-docker stop app
+An 80s themed playlist sharing website.
 
-#Remove
-docker rm app
+
+
+
+## Deployment
+
+Run on Docker
+
+```bash
+  docker build -t u21528790 .
+  docker run --name app -p 3001:3001 u21528790
+```
+```bash
+  docker stop app
+  docker rm app
+```
+
+## API Reference
+
+#### Get all users
+
+```http
+  GET /api/users
+```
+Gets a list of all users.
+
+
+
+#### Signup
+
+```http
+  POST /api/signup
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `username`      | `string` | **Required**. Username of the new user. |
+| `email`      | `string` | **Required**. Email address of the new user. |
+| `password`      | `string` | **Required**. Hashed password of the new user (Argon2i)|
+| `profile_picture`      | `string` | **Required**. Url for the new user. |
+| `followers`      | `array` | **Required**. Empty list of followers |
+| `following`      | `array` | **Required**. Empty list of followers |
+| `playlists_created`      | `array` | **Required**. Empty list of playlists |
+| `playlists_saved`      | `array` | **Required**. Empty list of playlists |
+| `description`      | `string` | **Required**. Empty description. |
+
+
+Creates a new user after signup.
+
+##### Example Response
+
+```javascript
+{
+    "id": "64e3f1bc9f12a61d2c5a4c58",
+    "username": "newuser",
+    "email": "newuser@example.com",
+    "password": "hashedPassword",
+    "profile_picture": "profilePic.jpg",
+    "followers": [],
+    "following": [],
+    "playlists_created": [],
+    "playlists_saved": [],
+    "description": "New user bio."
+}
+```
 
 
