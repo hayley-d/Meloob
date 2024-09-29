@@ -1,8 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 *{
+    font-family: "Montserrat", sans-serif;
     color:#28282f;
 }
 

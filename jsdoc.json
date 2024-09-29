@@ -1,9 +1,0 @@
-{
-  "source": {
-    "include": ["backend/userApi.js"]
-  },
-  "opts": {
-    "destination": "docs"
-  }
-}
-
