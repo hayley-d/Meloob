@@ -24,10 +24,10 @@ app.use(bodyParser.json());
 // API routes
 app.use('/api', UserRoutes);
 
-// Serve static files
+
 app.use(express.static(path.resolve("./frontend/public")));
 
-// Catch-all route for serving the frontend application
+
 app.get('/home', (req, res) => {
   res.sendFile(path.resolve("./frontend/public/index.html"));
 });
@@ -36,11 +36,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve("./frontend/public/index.html"));
 });
 
-app.get('/profile/*', (req, res) => {
+app.get('/profile', (req, res) => {
   res.sendFile(path.resolve("./frontend/public/index.html"));
 });
 
-app.get('/playlist/*', (req, res) => {
+app.get('/playlist', (req, res) => {
   res.sendFile(path.resolve("./frontend/public/index.html"));
 });
 
@@ -48,7 +48,7 @@ app.get('/browse', (req, res) => {
   res.sendFile(path.resolve("./frontend/public/index.html"));
 });
 
-app.get('/add/*', (req, res) => {
+app.get('/add', (req, res) => {
   res.sendFile(path.resolve("./frontend/public/index.html"));
 });
 app.get('/admin', (req, res) => {
@@ -70,3 +70,26 @@ const startServer = async () => {
 };
 
 startServer();
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Your API Title',
+      version: '1.0.0',
+      description: 'API Documentation',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3001',
+      },
+    ],
+  },
+  apis: ['./backend/userApi.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

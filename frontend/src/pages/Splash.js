@@ -13,7 +13,7 @@ export class Splash extends React.Component {
                 <div className="container text-center">
                     <div className="row">
                         <div className="col">
-                            <h3 className="about-heading">About</h3>
+                            <h3 className="about-heading text-white-theme">About</h3>
                             <p className="about-text">
                                 Welcome to Meloob, where we rewind to a time when music was actually good. Our mission
                                 is to rpovide our users with ad-free music from the golden era of tunes. At Meloov we

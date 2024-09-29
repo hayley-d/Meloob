@@ -1,17 +1,13 @@
 module.exports = {
-  content: [
-      './src/**/*.js ',
-    './public/**/*.html',
-    './public/assets/css/**/*.css'
-  ],
+  content: ['./frontend/src/**/*.{html,js} '],
   theme: {
     extend: {
       colors: {
-        'pink-custom': '#ff70a6',
-        'dark-gray': '#28282f',
-        'light-blue': '#70d6ff',
-        'orange-custom': '#ff9770',
-        'white': '#ffffff',
+        'pink-theme': '#ff70a6',
+        'dark-theme': '#28282f',
+        'blue-theme': '#70d6ff',
+        'orange-theme': '#ff9770',
+        'white-theme': '#ffffff',
       },
     },
   },
