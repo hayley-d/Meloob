@@ -6,5 +6,5 @@ Run on Docker
   docker stop app
   docker rm app
 
-docker load -i path\to\my_image.tar
-docker run -it meloob
+docker load -i "path\to\my_image.tar"
+
