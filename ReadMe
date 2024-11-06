@@ -1,8 +1,10 @@
 Run on Docker
 
-  docker build -t u21528790 .
-  docker run --name app -p 3001:3001 u21528790
+  docker build -t meloob .
+  docker run --name app -p 3001:3001 meloob
 
   docker stop app
   docker rm app
 
+docker load -i path\to\my_image.tar
+docker run -it meloob
